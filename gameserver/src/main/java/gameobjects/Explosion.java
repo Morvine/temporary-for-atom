@@ -29,9 +29,9 @@ public class Explosion extends Field implements Positionable, Tickable {
 
     public String toJson() {
         Point pos = getPosition();
-        String obj = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
+        String json = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
                 this.getId() + ",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
-        return obj;
+        return json;
     }
 
     @Override

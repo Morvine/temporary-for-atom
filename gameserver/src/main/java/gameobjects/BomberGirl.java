@@ -11,13 +11,17 @@ public class BomberGirl implements Tickable, Movable {
     private int y;
     private int id;
     private int velocity;
+    private int maxBombs;
+    private int speedModifier;
 
     public BomberGirl(int id, int x, int y) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.velocity = 10;
-        log.info("BomberGirl");
+        this.maxBombs = 1;
+        this.speedModifier = 1;
+        log.info("BomberGirl initialized");
     }
 
     public void tick(long elapsed) {
@@ -56,11 +60,12 @@ public class BomberGirl implements Tickable, Movable {
         return point;
 
     }
+
     public String toJson() {
         Point pos = getPosition();
-        String obj = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
+        String json = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
                 this.getId() + ",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
-        return obj;
+        return json;
     }
 
 }

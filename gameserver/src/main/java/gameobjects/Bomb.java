@@ -4,7 +4,6 @@ import geometry.Point;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 public class Bomb extends Field implements Positionable, Tickable {
     private static final Logger log = LogManager.getLogger(Bomb.class);
     private final int id;
@@ -31,8 +30,8 @@ public class Bomb extends Field implements Positionable, Tickable {
 
     public String toJson() {
         Point pos = getPosition();
-        String obj = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
+        String json = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
                 this.getId() + ",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
-        return obj;
+        return json;
     }
 }

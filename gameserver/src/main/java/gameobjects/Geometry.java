@@ -41,8 +41,6 @@ public final class Geometry {
     public static Collider createPoint(int x, int y) {
         Collider point = new Point(x, y);
         return point;
-
-
     }
 
 

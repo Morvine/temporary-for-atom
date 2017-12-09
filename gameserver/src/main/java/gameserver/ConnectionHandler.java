@@ -2,11 +2,16 @@ package gameserver;
 
 //import com.sun.corba.se.pept.transport.ConnectionCache;
 import boxes.ConnectionPool;
+import boxes.InputQueue;
+
+import gameobjects.Input;
+import message.Message;
 import org.springframework.stereotype.Component;
         import org.springframework.web.socket.*;
         import org.springframework.web.socket.handler.TextWebSocketHandler;
         import org.apache.logging.log4j.LogManager;
         import org.apache.logging.log4j.Logger;
+        import java.lang.*;
 
         import java.net.URI;
 
@@ -43,10 +48,12 @@ public class ConnectionHandler extends TextWebSocketHandler implements WebSocket
         }
     }
 
-    /*protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        log.info("Received " + message.getPayload());
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        log.info(Broker.getInstance().receive(session,message.getPayload()).getTopic());
+        log.info(Broker.getInstance().receive(session,message.getPayload()).getData());
+        InputQueue.getInstance().add(new Input(session,Broker.getInstance().receive(session,message.getPayload())));
+    }
 
-    }*/
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {

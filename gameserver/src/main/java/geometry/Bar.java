@@ -58,8 +58,9 @@ public class Bar implements Collider {
     }
     public boolean pointOnBar(Object o1)
     {
-        Point point =(Point) o1;
-        return x1<=point.x && point.x<=x2 && y1<=point.y && point.y<=y2;
+        return true;
+        /*Point point =(Point) o1;
+        return x1<=point.x && point.x<=x2 && y1<=point.y && point.y<=y2;*/
     }
     public boolean intersects (Object o1)
     {

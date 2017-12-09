@@ -27,6 +27,7 @@ public class GameService {
 
         log.info("New connection initialized game session for {} players", playerCount);
         GameCreatorQueue.getInstance().offer(playerCount);
+
     }
 
     @RequestMapping(

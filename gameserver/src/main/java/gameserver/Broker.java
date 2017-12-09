@@ -9,6 +9,7 @@ import message.Message;
 import message.Topic;
 import util.JsonHelper;
 
+
 public class Broker {
     private static final Logger log = LoggerFactory.getLogger(Broker.class);
 
@@ -23,9 +24,10 @@ public class Broker {
         this.connectionPool = ConnectionPool.getInstance();
     }
 
-    public void receive(@NotNull WebSocketSession session, @NotNull String msg) {
-        log.info("RECEIVED: " + msg);
+    public Message receive(@NotNull WebSocketSession session, @NotNull String msg) {
+        //log.info("RECEIVED: " + msg);
         Message message = JsonHelper.fromJson(msg, Message.class);
+        return message;
         //TODO TASK2 implement message processing
     }
 
@@ -41,3 +43,4 @@ public class Broker {
     }
 
 }
+

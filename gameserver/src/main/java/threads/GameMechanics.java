@@ -14,7 +14,7 @@ import boxes.GameStarterQueue;
 import gameobjects.*;
 
 
-public class GameSession implements Runnable {
+public class GameMechanics implements Runnable {
     private ConcurrentHashMap<Point, Wall> inGameWalls = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Bomb> inGameBombs = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Explosion> inGameExplosions = new ConcurrentHashMap<>();
@@ -30,7 +30,7 @@ public class GameSession implements Runnable {
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
+
 
             while (!GameStarterQueue.getInstance().contains((int) id)) {
                 try {
@@ -46,18 +46,16 @@ public class GameSession implements Runnable {
             while (!playerQueue.isEmpty()) {
                 log.info(playerQueue.poll());
             }
+            GameSession gameSession = new GameSession();
+            Ticker ticker = new Ticker();
+            ticker.gameLoop();
 
-            try {
-                Thread.sleep(5000);
-            } catch (Exception e) {
-
-            }
             log.info("Game #{} over", id);
-            Thread.currentThread().interrupt();
-        }
-    }
 
-    public GameSession(int playerCount) {
+        }
+
+
+    public GameMechanics(int playerCount) {
         this.playerCount = playerCount;
     }
 
@@ -105,7 +103,8 @@ public class GameSession implements Runnable {
             return result;
         }
     }
-    public BomberGirl getBomberGirl(player) {
+    public BomberGirl getBomberGirl() {
+        BomberGirl bomberGirl = new BomberGirl(1,2,3);
         return bomberGirl;
     }
 }

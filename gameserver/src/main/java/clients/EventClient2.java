@@ -6,6 +6,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import com.google.gson.*;
 
 import java.io.IOException;
 
@@ -25,7 +26,7 @@ public class EventClient2 {
 
             session = fut.get();
 
-            //session.sendMessage(new TextMessage("Hello"));
+            session.sendMessage(new TextMessage("{\"topic\":\"MOVE\",\"data\":{\"direction\":\"UP\"}}"));   //{"direction":"UP" }
 
             while (!stop) {
                 Thread.sleep(100000);

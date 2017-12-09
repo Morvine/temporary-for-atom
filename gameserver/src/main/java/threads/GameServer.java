@@ -29,11 +29,11 @@ public class GameServer implements Runnable {
                     //Thread.sleep(100);
                 }
                 playerCount = GameCreatorQueue.getInstance().take();
-                GameSession gameSession = new GameSession(playerCount);
-                Thread game = new Thread(gameSession);
+                GameMechanics GameMechanics = new GameMechanics(playerCount);
+                Thread game = new Thread(GameMechanics);
                 game.start();
-                log.info("GameSession with id: " + gameSession.getId() + " was created");
-                sendGameId(gameSession.getId());
+                log.info("GameMechanics with id: " + GameMechanics.getId() + " was created");
+                sendGameId(GameMechanics.getId());
             } catch (Exception e) {
                 log.info("No response");
             }
