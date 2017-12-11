@@ -14,8 +14,10 @@ public class Ticker {
     private static final long FRAME_TIME = 1000 / FPS;
     private Set<Tickable> tickables = new ConcurrentSkipListSet<>();
     private long tickNumber = 0;
+    private GameSession gameSession;
 
-    public void gameLoop() {
+    public void gameLoop(GameSession gameSession) {
+        this.gameSession = gameSession;
         while (!Thread.currentThread().isInterrupted()) {
             long started = System.currentTimeMillis();
             act(FRAME_TIME);
@@ -42,6 +44,9 @@ public class Ticker {
     private void act(long elapsed) {
         tickables.forEach(tickable -> tickable.tick(elapsed));
     }
+    /*private void act(long elapsed) {
+        for (Tickable tickable: GameSession().getGameObjects());
+    }*/
 
     public long getTickNumber() {
         return tickNumber;

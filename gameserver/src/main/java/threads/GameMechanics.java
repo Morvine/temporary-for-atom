@@ -18,7 +18,7 @@ public class GameMechanics implements Runnable {
     private ConcurrentHashMap<Point, Wall> inGameWalls = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Bomb> inGameBombs = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Explosion> inGameExplosions = new ConcurrentHashMap<>();
-    private static final Logger log = LogManager.getLogger(GameServer.class);
+    private static final Logger log = LogManager.getLogger(GameMechanics.class);
     private static AtomicLong idGenerator = new AtomicLong();
 
 
@@ -26,33 +26,29 @@ public class GameMechanics implements Runnable {
 
     private long id = idGenerator.getAndIncrement() + 1;
 
-    private ConcurrentLinkedQueue<String> playerList = ConnectionPool.getInstance().getPlayerQueueWithGameId((int)id);
-
     @Override
     public void run() {
 
-
-            while (!GameStarterQueue.getInstance().contains((int) id)) {
-                try {
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                }
+        while (!GameStarterQueue.getInstance().contains((int) id)) {
+            try {
+                Thread.sleep(100);
+            } catch (Exception e) {
             }
-            GameStarterQueue.getInstance().poll();
-            log.info("Game {} started", id);
-            log.info("Players in this session:");
-
-            ConcurrentLinkedQueue playerQueue = ConnectionPool.getInstance().getPlayerQueueWithGameId((int) id);
-            while (!playerQueue.isEmpty()) {
-                log.info(playerQueue.poll());
-            }
-            GameSession gameSession = new GameSession();
-            Ticker ticker = new Ticker();
-            ticker.gameLoop();
-
-            log.info("Game #{} over", id);
-
         }
+        GameStarterQueue.getInstance().poll();
+        log.info("Game {} started", id);
+        log.info("Players in this session:");
+        ConcurrentLinkedQueue playerQueue = ConnectionPool.getInstance().getPlayerQueueWithGameId((int) id);
+        while (!playerQueue.isEmpty()) {
+            log.info(playerQueue.poll());
+        }
+        GameSession gameSession = new GameSession();
+        gameSession.initGameArea();
+        Ticker ticker = new Ticker();
+        ticker.gameLoop(gameSession);
+        log.info("Game #{} over", id);
+
+    }
 
 
     public GameMechanics(int playerCount) {
@@ -63,6 +59,7 @@ public class GameMechanics implements Runnable {
     public long getId() {
         return id;
     }
+
     public String jsonStringWalls() {
         String objjson = "";
         for (Point p : inGameWalls.keySet()) {
@@ -72,7 +69,8 @@ public class GameMechanics implements Runnable {
         String result = objjson.substring(0, (objjson.length() - 1));
         return result;
     }
-    public int gameSessionPlayerCount (){
+
+    public int getGameSessionPlayerCount() {
         return playerCount;
     }
 
@@ -103,8 +101,12 @@ public class GameMechanics implements Runnable {
             return result;
         }
     }
+
     public BomberGirl getBomberGirl() {
-        BomberGirl bomberGirl = new BomberGirl(1,2,3);
+        BomberGirl bomberGirl = new BomberGirl(1, 2);
         return bomberGirl;
+    }
+
+    private void initGameField() {
     }
 }

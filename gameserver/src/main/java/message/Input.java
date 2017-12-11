@@ -1,4 +1,4 @@
-package gameobjects;
+package message;
 
 import message.Message;
 import org.springframework.web.socket.WebSocketSession;

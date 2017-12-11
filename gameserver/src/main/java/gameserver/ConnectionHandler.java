@@ -4,16 +4,13 @@ package gameserver;
 import boxes.ConnectionPool;
 import boxes.InputQueue;
 
-import gameobjects.Input;
-import message.Message;
+import message.Input;
 import org.springframework.stereotype.Component;
         import org.springframework.web.socket.*;
         import org.springframework.web.socket.handler.TextWebSocketHandler;
         import org.apache.logging.log4j.LogManager;
         import org.apache.logging.log4j.Logger;
         import java.lang.*;
-
-        import java.net.URI;
 
 @Component
 public class ConnectionHandler extends TextWebSocketHandler implements WebSocketHandler {

@@ -1,28 +1,31 @@
 package gameobjects;
 
+import geometry.Bar;
 import geometry.Point;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-public class BomberGirl implements Tickable, Movable {
+public class BomberGirl extends Field implements Tickable, Movable {
     private static final Logger log = LogManager.getLogger(BomberGirl.class);
     private int x;
     private int y;
     private int id;
-    private int velocity;
+    private double velocity;
     private int maxBombs;
-    private int speedModifier;
+    private double speedModifier;
+    private boolean alive = true;
 
-    public BomberGirl(int id, int x, int y) {
-        this.id = id;
-        this.x = x;
-        this.y = y;
-        this.velocity = 10;
+    public BomberGirl(int x, int y) {
+        super(x, y);
+        this.id = getId();
+        this.velocity = 0.05;
         this.maxBombs = 1;
         this.speedModifier = 1;
-        log.info("BomberGirl initialized");
+        log.info("New BomberGirl with id {}", id);
     }
+
+
 
     public void tick(long elapsed) {
         log.info("tick");
@@ -32,34 +35,22 @@ public class BomberGirl implements Tickable, Movable {
 
     public Point move(Direction direction, long time) {
         if (direction == direction.UP) {
-            y = y + velocity * (int) time;
+            y = y + (int)(velocity * time);
         }
         if (direction == direction.DOWN) {
-            y = y - velocity * (int) time;
+            y = y - (int)(velocity * time);
         }
         if (direction == direction.LEFT) {
-            x = x - velocity * (int) time;
+            x = x - (int)(velocity * time);
         }
         if (direction == direction.RIGHT) {
-            x = x + velocity * (int) time;
+            x = x + (int)(velocity * time);
         }
         if (direction == direction.IDLE) {
-            x = x;
-            y = y;
         }
         return getPosition();
     }
 
-
-    public int getId() {
-        return id;
-    }
-
-    public Point getPosition() {
-        Point point = new Point(x, y);
-        return point;
-
-    }
 
     public String toJson() {
         Point pos = getPosition();

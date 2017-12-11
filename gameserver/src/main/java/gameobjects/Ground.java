@@ -4,15 +4,15 @@ import geometry.Point;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Wall extends Field implements Positionable {
+public class Ground extends Field implements Positionable {
     private int x;
     private int y;
     private int id;
 
-    public Wall(int x, int y) {
+    public Ground(int x, int y) {
         super(x, y);
         this.id = getId();
-        log.info("New wall with id {}", id);
+        log.info("New ground with id {}", id);
     }
 
     private final static Logger log = LogManager.getLogger(Wall.class);
@@ -26,3 +26,4 @@ public class Wall extends Field implements Positionable {
 
 
 }
+

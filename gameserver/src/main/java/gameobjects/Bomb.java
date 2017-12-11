@@ -1,5 +1,6 @@
 package gameobjects;
 
+import geometry.Bar;
 import geometry.Point;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,16 +8,18 @@ import org.apache.logging.log4j.Logger;
 public class Bomb extends Field implements Positionable, Tickable {
     private static final Logger log = LogManager.getLogger(Bomb.class);
     private final int id;
-    private Point point;
+    private Point position;
     private long time;
-    private final long lifeTime = 1;
+    private boolean alive;
+    private final long lifeTime = 2;
 
     public Bomb(int x, int y, long time) {
-        super(x, y);
+        super(x,y);
         this.id = getId();
-        this.point = getPosition();
-        log.info("Bombid = " + id + "; " + "Bomb place = (" + point.getX() + "," +
-                point.getY() + ")" + "; " + "Bomb timer = " + time);
+        this.position = new Point(x,y);
+        this.time= time;
+        log.info("Bombid = " + id + "; " + "Bomb place = (" + position.getX() + "," +
+                position.getY() + ")" + "; " + "Bomb timer = " + time);
     }
 
     @Override
@@ -27,6 +30,7 @@ public class Bomb extends Field implements Positionable, Tickable {
             time -= elapsed;
         }
     }
+
 
     public String toJson() {
         Point pos = getPosition();

@@ -1,6 +1,6 @@
 package boxes;
 
-import gameobjects.Input;
+import message.Input;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;

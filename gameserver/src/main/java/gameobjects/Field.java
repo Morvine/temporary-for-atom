@@ -1,16 +1,23 @@
 package gameobjects;
 
+import geometry.Bar;
 import geometry.Point;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public abstract class Field implements Positionable {
+    private Point position;
+    private int x;
+    private int y;
+    private static AtomicInteger idGenerator = new AtomicInteger();
+
     private int id;
-    private Point point;
-    private static int nextId = 0;
 
     public Field(int x, int y) {
-        this.point = new Point(x, y);
-        this.id = nextId;
-        nextId++;
+        this.x = x;
+        this.y = y;
+        this.position = new Point(x, y);
+        this.id = idGenerator.getAndIncrement() + 1;
     }
 
     @Override
@@ -20,6 +27,6 @@ public abstract class Field implements Positionable {
 
     @Override
     public Point getPosition() {
-        return this.point;
+        return position;
     }
 }

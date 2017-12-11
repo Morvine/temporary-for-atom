@@ -6,7 +6,6 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import com.google.gson.*;
 
 import java.io.IOException;
 
