@@ -30,7 +30,6 @@ public class GameSession implements Tickable {
     }
 
     public void initGameArea() {
-
         for (int x = 0; x < 17; x++) {
             for (int y = 0; y < 13; y++) {
                 if ((x == 0) || (x == 16)) {
@@ -78,21 +77,22 @@ public class GameSession implements Tickable {
                     if (y % 2 != 0) {
                         addGameObject(new Box(x * 32, y * 32));
                         gameArea[x][y].addState(State.BOX);
+                    } else if (x % 2 != 0) {
+                        addGameObject(new Box(x * 32, y * 32));
+                        gameArea[x][y].addState(State.BOX);
                     }
                 }
-
             }
         }
-        ConcurrentLinkedQueue<WebSocketSession> playerQueue = ConnectionPool.getInstance().getSessionsWithGameId((int)id);
-        addGameObject(new BomberGirl(32, 32, playerQueue.poll()));
-        addGameObject(new BomberGirl(480, 32, playerQueue.poll()));
-        addGameObject(new BomberGirl(32, 352, playerQueue.poll()));
-        addGameObject(new BomberGirl(480, 352, playerQueue.poll()));
+        ConcurrentLinkedQueue<WebSocketSession> playerQueue = ConnectionPool.getInstance().getSessionsWithGameId((int) id);
+        addGameObject(new BomberGirl(32, 32, playerQueue.poll(),(int)id));
+        addGameObject(new BomberGirl(480, 32, playerQueue.poll(),(int)id));
+        addGameObject(new BomberGirl(32, 352, playerQueue.poll(),(int)id));
+        addGameObject(new BomberGirl(480, 352, playerQueue.poll(),(int)id));
         gameArea[1][1].addState(State.BOMBERGIRL);
         gameArea[15][1].addState(State.BOMBERGIRL);
         gameArea[1][11].addState(State.BOMBERGIRL);
         gameArea[15][11].addState(State.BOMBERGIRL);
-
     }
 
     public Cell[][] getGameArea() {
@@ -103,15 +103,14 @@ public class GameSession implements Tickable {
         return gameArea[x][y];
     }
 
-    public void addStateToCell(int x, int y, State state){
+    public void addStateToCell(int x, int y, State state) {
         gameArea[x][y].addState(state);
     }
 
-    public void removeStateFromCell (int x, int y, State state) {
+    public void removeStateFromCell(int x, int y, State state) {
         if (gameArea[x][y].getState().contains(state))
             gameArea[x][y].getState().remove(state);
     }
-
 
 
     @Override

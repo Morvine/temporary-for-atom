@@ -28,7 +28,7 @@ public class GameServer implements Runnable {
                 while (GameCreatorQueue.getInstance().isEmpty()) {
                     //Thread.sleep(100);
                 }
-                playerCount = GameCreatorQueue.getInstance().take();
+                playerCount = GameCreatorQueue.getInstance().poll();
                 GameMechanics GameMechanics = new GameMechanics(playerCount);
                 Thread game = new Thread(GameMechanics);
                 game.start();

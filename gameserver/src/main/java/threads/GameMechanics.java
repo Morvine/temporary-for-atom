@@ -1,6 +1,7 @@
 package threads;
 
 import boxes.ConnectionPool;
+import boxes.GameSessionMap;
 import geometry.Point;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,9 +22,8 @@ public class GameMechanics implements Runnable {
     private ConcurrentHashMap<Integer, Explosion> inGameExplosions = new ConcurrentHashMap<>();
     private static final Logger log = LogManager.getLogger(GameMechanics.class);
     private static AtomicLong idGenerator = new AtomicLong();
-
-
     private int playerCount;
+
 
     private long id = idGenerator.getAndIncrement() + 1;
 
@@ -43,14 +43,19 @@ public class GameMechanics implements Runnable {
         while (!playerQueue.isEmpty()) {
             log.info(playerQueue.poll());
         }
-        GameSession gameSession = new GameSession(id);
+        GameSession gameSession = new GameSession((int)id);
         gameSession.initGameArea();
+        GameSessionMap.getInstance().add((int)id, gameSession);
+        /*for (int y = 0; y < 13; y++) {
+            for (int x = 0; x < 17; x++)
+                System.out.print(gameSession.getCellFromGameArea(x, y).getState());
+            System.out.print("\n");}*/  //Proverka zapolnenia pol`a
+
         //Ticker ticker = new Ticker();
         //ticker.gameLoop(gameSession);
         log.info("Game #{} over", id);
 
     }
-
 
     public GameMechanics(int playerCount) {
         this.playerCount = playerCount;
@@ -104,11 +109,12 @@ public class GameMechanics implements Runnable {
     }
 
     public BomberGirl getBomberGirl() {
-        WebSocketSession session=null;
-        BomberGirl bomberGirl = new BomberGirl(1, 2, session);
+        WebSocketSession session = null;
+        BomberGirl bomberGirl = new BomberGirl(1, 2, session,32332);
         return bomberGirl;
     }
 
-    private void initGameField() {
-    }
+    /*private GameSession getGameSession(int id) {
+
+    }*/
 }

@@ -1,6 +1,8 @@
-package gameobjects;
+package gameserver;
 
 
+import gameobjects.GameSession;
+import gameobjects.Tickable;
 import org.slf4j.LoggerFactory;
 
 import java.util.Set;
