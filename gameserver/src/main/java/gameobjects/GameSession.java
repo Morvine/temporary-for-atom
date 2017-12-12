@@ -1,6 +1,8 @@
 package gameobjects;
 
 import boxes.ConnectionPool;
+import dto.ObjectDto;
+import dto.PawnDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.socket.WebSocketSession;
@@ -111,7 +113,26 @@ public class GameSession implements Tickable {
         if (gameArea[x][y].getState().contains(state))
             gameArea[x][y].getState().remove(state);
     }
+    public static ArrayList<Object> getAllDto() {
+        ArrayList<Object> objects = new ArrayList<>();
+        for (GameObject object: game) {
+            objects.add(new ObjectDto(wall));
+        }
+        for (Wood wood: mapWood) {
+            objects.add(new ObjectDto(wood));
+        }
+        for (Fire fire: mapFire) {
+            objects.add(new ObjectDto(fire));
+        }
+        for (Bomb bomb: mapBombs) {
+            objects.add(new ObjectDto(bomb));
+        }
+        for (Player player: mapPlayers) {
+            objects.add(new PawnDto(player));
+        }
 
+        return objects;
+    }
 
 
     @Override

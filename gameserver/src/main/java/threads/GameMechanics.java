@@ -1,7 +1,10 @@
 package threads;
 
 import boxes.ConnectionPool;
+import dto.ReplicaDto;
+import gameserver.Broker;
 import geometry.Point;
+import message.Topic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -45,6 +48,15 @@ public class GameMechanics implements Runnable {
         }
         GameSession gameSession = new GameSession(id);
         gameSession.initGameArea();
+        String replica =  "{\"objects\":[{\"position\":{\"x\":16.0,\"y\":12.0},\"id\":16,\"type\":\"Wall\"},{\"position\":{\"x\":32.0,\"y\":32.0},\"id\":213,\"velocity\":0.05,\"maxBombs\":1,\"bombPower\":1,\"speedModifier\":1.0,\"type\":\"Pawn\"},{\"position\":{\"x\":32.0,\"y\":352.0},\"id\":214,\"velocity\":0.05,\"maxBombs\":1,\"bombPower\":1,\"speedModifier\":1.0,\"type\":\"Pawn\"}] \"gameOver\":false }";
+        while (!Thread.currentThread().isInterrupted()) {
+            try {
+                Thread.sleep(100);
+                Broker.getInstance().broadcast( new ReplicaDto(GameSession.getAllDto(), false));
+
+            } catch (Exception e) {
+            }
+        }
         //Ticker ticker = new Ticker();
         //ticker.gameLoop(gameSession);
         log.info("Game #{} over", id);
