@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import boxes.GameStarterQueue;
 
 import gameobjects.*;
+import org.springframework.web.socket.WebSocketSession;
 
 
 public class GameMechanics implements Runnable {
@@ -38,14 +39,14 @@ public class GameMechanics implements Runnable {
         GameStarterQueue.getInstance().poll();
         log.info("Game {} started", id);
         log.info("Players in this session:");
-        ConcurrentLinkedQueue playerQueue = ConnectionPool.getInstance().getPlayerQueueWithGameId((int) id);
+        ConcurrentLinkedQueue playerQueue = ConnectionPool.getInstance().getPlayersWithGameId((int) id);
         while (!playerQueue.isEmpty()) {
             log.info(playerQueue.poll());
         }
-        GameSession gameSession = new GameSession();
+        GameSession gameSession = new GameSession(id);
         gameSession.initGameArea();
-        Ticker ticker = new Ticker();
-        ticker.gameLoop(gameSession);
+        //Ticker ticker = new Ticker();
+        //ticker.gameLoop(gameSession);
         log.info("Game #{} over", id);
 
     }
@@ -103,7 +104,8 @@ public class GameMechanics implements Runnable {
     }
 
     public BomberGirl getBomberGirl() {
-        BomberGirl bomberGirl = new BomberGirl(1, 2);
+        WebSocketSession session=null;
+        BomberGirl bomberGirl = new BomberGirl(1, 2, session);
         return bomberGirl;
     }
 

@@ -10,7 +10,7 @@ public class Replicator {
 
     public void writeReplica(GameMechanics gameMechanics, ConnectionPool connectionPool) {
         String[] playerList = null;
-        ConnectionPool.getInstance().getPlayerQueueWithGameId((int) gameMechanics.getId()).toArray(playerList);
+        ConnectionPool.getInstance().getPlayersWithGameId((int) gameMechanics.getId()).toArray(playerList);
         for (int i = 0; i < gameMechanics.getGameSessionPlayerCount(); i++) {
             String player = playerList[i];
             WebSocketSession session = ConnectionPool.getInstance().getSession(player);

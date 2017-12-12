@@ -1,6 +1,7 @@
 package gameserver;
 
 import boxes.ConnectionPool;
+import message.DirectionMessage;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,6 @@ public class Broker {
         //log.info("RECEIVED: " + msg);
         Message message = JsonHelper.fromJson(msg, Message.class);
         return message;
-        //TODO TASK2 implement message processing
     }
 
     public void send(@NotNull String player, @NotNull Topic topic, @NotNull Object object) {

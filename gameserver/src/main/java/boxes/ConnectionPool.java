@@ -63,13 +63,25 @@ public class ConnectionPool {
 
     }
 
-    public ConcurrentLinkedQueue<String> getPlayerQueueWithGameId(int gameId) {
+    public ConcurrentLinkedQueue<WebSocketSession> getSessionsWithGameId(int gameId) {
 
+        ConcurrentLinkedQueue<WebSocketSession> result = new ConcurrentLinkedQueue<>();
+        try {
+            for (String player : pool.values()) {
+                if (gameId == ConnectionPool.getInstance().getGameId(player)) {
+                    result.offer(getSession(player));
+                }
+            }
+        } catch (NullPointerException e) {log.warn("Mistake :(");}
+        return result;
+    }
+
+    public ConcurrentLinkedQueue<String> getPlayersWithGameId(int gameId) {
         ConcurrentLinkedQueue<String> result = new ConcurrentLinkedQueue<>();
         try {
             for (String player : pool.values()) {
                 if (gameId == ConnectionPool.getInstance().getGameId(player)) {
-                    result.add(player);
+                    result.offer(player);
                 }
             }
         } catch (NullPointerException e) {log.warn("Mistake :(");}

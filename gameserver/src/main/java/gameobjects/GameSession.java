@@ -1,17 +1,25 @@
 package gameobjects;
 
+import boxes.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameSession implements Tickable {
     private static final Logger log = LogManager.getLogger(GameSession.class);
     private List<GameObject> gameObjects = new ArrayList<>();
-    private static AtomicInteger idGenerator = new AtomicInteger();
-    private Cell[][] gameArea = new Cell[12][16];
+    private Cell[][] gameArea = new Cell[17][13];
+    private long id;
+
+    public GameSession(long id) {
+        this.id = id;
+    }
 
     public List<GameObject> getGameObjects() {
         return new ArrayList<>(gameObjects);
@@ -75,10 +83,11 @@ public class GameSession implements Tickable {
 
             }
         }
-        addGameObject(new BomberGirl(32, 32));
-        addGameObject(new BomberGirl(480, 32));
-        addGameObject(new BomberGirl(32, 352));
-        addGameObject(new BomberGirl(480, 352));
+        ConcurrentLinkedQueue<WebSocketSession> playerQueue = ConnectionPool.getInstance().getSessionsWithGameId((int)id);
+        addGameObject(new BomberGirl(32, 32, playerQueue.poll()));
+        addGameObject(new BomberGirl(480, 32, playerQueue.poll()));
+        addGameObject(new BomberGirl(32, 352, playerQueue.poll()));
+        addGameObject(new BomberGirl(480, 352, playerQueue.poll()));
         gameArea[1][1].addState(State.BOMBERGIRL);
         gameArea[15][1].addState(State.BOMBERGIRL);
         gameArea[1][11].addState(State.BOMBERGIRL);
@@ -102,6 +111,8 @@ public class GameSession implements Tickable {
         if (gameArea[x][y].getState().contains(state))
             gameArea[x][y].getState().remove(state);
     }
+
+
 
     @Override
     public void tick(long elapsed) {
