@@ -19,8 +19,8 @@ public class Wall extends Field implements Positionable {
 
     public String toJson() {
         Point pos = getPosition();
-        String json = "{\"id\":" + this.getId() +
-                ",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
+        String json = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
+                this.getId() + ",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
         return json;
     }
 

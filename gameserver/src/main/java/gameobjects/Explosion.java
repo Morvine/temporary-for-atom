@@ -9,22 +9,31 @@ public class Explosion extends Field implements Positionable, Tickable {
     private final int id;
     private Point point;
     private long time;
+    private GameSession gameSession;
+    private boolean alive;
 
-    public Explosion(int x, int y, long time) {
+
+    public Explosion(int x, int y, GameSession gameSession) {
         super(x, y);
         this.id = getId();
+        this.alive = true;
+        this.gameSession = gameSession;
         this.point = getPosition();
+        this.time = 400;
         log.info("Explosionid = " + id + "; " + "Explosion place = (" + point.getX() + "," +
                 point.getY() + ")" + "; " + "Explosion timer = " + time);
     }
 
     @Override
     public void tick(long elapsed) {
-        if (time < elapsed) {
-            time = 0;
-        } else {
-            time -= elapsed;
-        }
+        if (alive) {
+            if (time < elapsed) {
+                time = 0;
+                alive = false;
+            } else {
+                time -= elapsed;
+            }
+        } else gameSession.removeGameObject(this);
     }
 
     public String toJson() {

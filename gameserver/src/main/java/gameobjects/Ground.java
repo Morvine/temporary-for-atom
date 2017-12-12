@@ -15,12 +15,12 @@ public class Ground extends Field implements Positionable {
         log.info("New ground with id {}", id);
     }
 
-    private final static Logger log = LogManager.getLogger(Wall.class);
+    private final static Logger log = LogManager.getLogger(Ground.class);
 
     public String toJson() {
         Point pos = getPosition();
-        String json = "{\"id\":" + this.getId() +
-                ",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
+        String json = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
+                this.getId() + "\",\"material\":\"grass\",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
         return json;
     }
 
