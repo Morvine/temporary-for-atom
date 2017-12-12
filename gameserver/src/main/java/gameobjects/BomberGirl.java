@@ -59,7 +59,6 @@ public class BomberGirl extends Field implements Tickable, Movable {
         } else gameSession.removeGameObject(this);
     }
 
-
     public Point move(Direction direction, long time) {
         if (direction == direction.UP) {
             if (!((this.gameSession.getCellFromGameArea(getPosition().getX() / 32,
