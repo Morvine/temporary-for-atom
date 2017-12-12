@@ -1,18 +1,14 @@
 package gameserver;
 
 import boxes.ConnectionPool;
-import message.Message;
 import message.Topic;
 import org.springframework.web.socket.WebSocketSession;
 import threads.GameMechanics;
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
 
 
 public class Replicator {
-    private static final Gson gson = new Gson();
-/*    public void writeReplica(GameMechanics gameMechanics, ConnectionPool connectionPool) {
+
+    public void writeReplica(GameMechanics gameMechanics, ConnectionPool connectionPool) {
         String[] playerList = null;
         ConnectionPool.getInstance().getPlayersWithGameId((int) gameMechanics.getId()).toArray(playerList);
         for (int i = 0; i < gameMechanics.getGameSessionPlayerCount(); i++) {
@@ -34,18 +30,5 @@ public class Replicator {
                         "," + gameMechanics.jsonStringBombs() + "," + gameMechanics.jsonStringExplosions() + "," + gameMechanics.getBomberGirl().toJson());
             }
         }
-    }*/
-
-
-    public static String toJson(ArrayList<Object> objects) {
-        return gson.toJson(objects);
-    }
-
-    public static String toJson(Object object) {
-        return gson.toJson(object);
-    }
-
-    public static Message toMessage(String json) {
-        return gson.fromJson(json, Message.class);
     }
 }

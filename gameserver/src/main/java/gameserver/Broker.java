@@ -34,20 +34,12 @@ public class Broker {
     public void send(@NotNull String player, @NotNull Topic topic, @NotNull Object object) {
         String message = JsonHelper.toJson(new Message(topic, JsonHelper.toJson(object)));
         WebSocketSession session = connectionPool.getSession(player);
-        log.info(message);
         connectionPool.send(session, message);
     }
 
-
-/*    public void broadcast(@NotNull Topic topic, @NotNull Object object) {
+    public void broadcast(@NotNull Topic topic, @NotNull Object object) {
         String message = JsonHelper.toJson(new Message(topic, JsonHelper.toJson(object)));
-        log.info(message);
         connectionPool.broadcast(message);
-    }*/
-    public void broadcast(@NotNull Object object) {
-       String message = Replicator.toJson(object);
-       //log.info("Broadcast REPLICA: {}",  message);
-       connectionPool.broadcast(message);
     }
 
 }
