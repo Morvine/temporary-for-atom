@@ -1,6 +1,6 @@
 ServerProxy = Class.extend({
     gameServerUrl: "192.168.99.100:8090",
-    matchMakerUrl: "192.168.99.100:8080/matchmaker/join",
+    matchMakerUrl: "localhost:8080/matchmaker/join",
     gameId: "1234",
 
     socket: null,
@@ -30,6 +30,32 @@ ServerProxy = Class.extend({
     },
 
     getSessionIdFromMatchMaker: function () {
+/*        var that = this;
+        var login = $("#loginInput").val();
+        if(!login){
+            alert("Please input");
+            console.log("Empty login, retry login");
+        }
+        $.ajax({
+            type: "post",
+            url: that.matchMakerUrl,
+            dataType: 'text',
+            contentType: 'application/x-www-form-urlencoded',
+            data: {
+                'name' : login
+            },
+
+            success: function(data){
+                that.gameId=data;
+                console.log("Matchmaker returned gameId=" + data);
+                that.connectToGameServer(that.gameId, login);
+            },
+            error: function(){
+                alert("Matchmaker request failed, use default gameId=" + that.gameId);
+                console.log("Matchmaker request failed, use default gameId=" + that.gameId);
+                that.connectToGameServer(that.gameId, login);
+            }
+        });*/
         var that = this;
         var login = $("#loginInput").val();
         if(!login){
