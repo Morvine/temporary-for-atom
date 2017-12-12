@@ -1,6 +1,7 @@
 ServerProxy = Class.extend({
-    gameServerUrl: "192.168.99.100:8090",
-    matchMakerUrl: "localhost:8080/matchmaker/join",
+    //gameServerUrl: "52.91.84.175:20090",
+    gameServerUrl: "localhost:8090",
+    matchMakerUrl: "http://localhost:8080/matchmaker/join",
     gameId: "1234",
 
     socket: null,
@@ -30,66 +31,42 @@ ServerProxy = Class.extend({
     },
 
     getSessionIdFromMatchMaker: function () {
-/*        var that = this;
-        var login = $("#loginInput").val();
-        if(!login){
-            alert("Please input");
-            console.log("Empty login, retry login");
-        }
-        $.ajax({
-            type: "post",
-            url: that.matchMakerUrl,
-            dataType: 'text',
-            contentType: 'application/x-www-form-urlencoded',
-            data: {
-                'name' : login
-            },
-
-            success: function(data){
-                that.gameId=data;
-                console.log("Matchmaker returned gameId=" + data);
-                that.connectToGameServer(that.gameId, login);
-            },
-            error: function(){
-                alert("Matchmaker request failed, use default gameId=" + that.gameId);
-                console.log("Matchmaker request failed, use default gameId=" + that.gameId);
-                that.connectToGameServer(that.gameId, login);
-            }
-        });*/
         var that = this;
         var login = $("#loginInput").val();
+        console.log("LOGIN=" + $("#loginInput").val());
         if(!login){
             alert("Please input login");
             console.log("Empty login, retry login");
         }
         $.ajax({
-            contentType: 'application/x-www-form-urlencoded',
-            data: {
-                "name": login
-            },
-            dataType: 'text',
-            success: function(data){
-                that.gameId=data;
-                console.log("Matchmaker returned gameId=" + data);
-                that.connectToGameServer(that.gameId, login);
-            },
-            error: function(){
-                alert("Matchmaker request failed, use default gameId=" + that.gameId);
-                console.log("Matchmaker request failed, use default gameId=" + that.gameId);
-                that.connectToGameServer(that.gameId, login);
-            },
-            processData: false,
-            type: 'POST',
-            url: that.matchMakerUrl
+                    contentType: 'application/x-www-form-urlencoded',
+                    data: {
+                        "name": login
+                    },
+                    dataType: 'text',
+                    success: function(data){
+                        that.gameId=data;
+                        console.log("Matchmaker returned gameId=" + data);
+                        that.connectToGameServer(that.gameId, login);
+                    },
+                    error: function(){
+                        alert("Matchmaker request failed, use default gameId=" + that.gameId);
+                        console.log("Matchmaker request failed, use default gameId=" + that.gameId);
+                        that.connectToGameServer(that.gameId, login);
+                    },
+                    //processData: false,
+                    type: 'POST',
+                    url: that.matchMakerUrl
         });
     },
 
     connectToGameServer: function (gameId, login) {
         var self = this;
+
         this.socket = new WebSocket("ws://" + this.gameServerUrl + "/game/connect?gameId=" + gameId + "&name=" + login);
 
         this.socket.onopen = function () {
-            console.log("Connection established.");
+            console.log("Connection established");
         };
 
         this.socket.onclose = function (event) {

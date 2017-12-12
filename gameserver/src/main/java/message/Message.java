@@ -3,6 +3,7 @@ package message;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
+import gameobjects.Movable;
 
 public class Message {
     private final Topic topic;
@@ -11,6 +12,7 @@ public class Message {
     public Message(Topic topic, String data) {
         this.topic = topic;
         this.data = data;
+
     }
 
     @JsonCreator
@@ -19,11 +21,15 @@ public class Message {
         this.data = data.toString();
     }
 
-    Topic getTopic() {
+    public Topic getTopic() {
         return topic;
     }
 
-    String getData() {
+    public String getData() {
         return data;
     }
+
+    /*public Movable.Direction getDirection() {
+        if (data=="UP")
+    }*/
 }

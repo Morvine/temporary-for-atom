@@ -1,6 +1,7 @@
 package gameserver;
 
 import boxes.ConnectionPool;
+import message.DirectionMessage;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,7 @@ import org.springframework.web.socket.WebSocketSession;
 import message.Message;
 import message.Topic;
 import util.JsonHelper;
+
 
 public class Broker {
     private static final Logger log = LoggerFactory.getLogger(Broker.class);
@@ -23,10 +25,10 @@ public class Broker {
         this.connectionPool = ConnectionPool.getInstance();
     }
 
-    public void receive(@NotNull WebSocketSession session, @NotNull String msg) {
-        log.info("RECEIVED: " + msg);
+    public Message receive(@NotNull WebSocketSession session, @NotNull String msg) {
+        //log.info("RECEIVED: " + msg);
         Message message = JsonHelper.fromJson(msg, Message.class);
-        //TODO TASK2 implement message processing
+        return message;
     }
 
     public void send(@NotNull String player, @NotNull Topic topic, @NotNull Object object) {
@@ -41,3 +43,4 @@ public class Broker {
     }
 
 }
+

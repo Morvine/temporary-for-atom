@@ -4,6 +4,7 @@ dependencies {
     compile rootProject.libraries.log4j
     compile rootProject.libraries.okhttp
     compile ('org.springframework.boot:spring-boot-starter-websocket')
+    compile rootProject.libraries.gson
     compile rootProject.libraries.jetbrainsAnnotations
 
     testCompile rootProject.libraries.okhttp

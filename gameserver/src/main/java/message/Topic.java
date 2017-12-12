@@ -5,7 +5,7 @@ public enum Topic {
     MOVE,
     PLANT_BOMB,
     REPLICA,
-
+    direction,
     START,
     END_MATCH, POSSESS, FINISH
 }

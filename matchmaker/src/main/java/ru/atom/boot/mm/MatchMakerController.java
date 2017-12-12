@@ -7,11 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import ru.atom.thread.mm.ConnectionQueue;
 import ru.atom.thread.mm.GameId;
 import ru.atom.thread.mm.GameIdQueue;
@@ -26,6 +22,7 @@ import java.util.List;
 
 
 @Controller
+@CrossOrigin
 @RequestMapping("/matchmaker")
 public class MatchMakerController {
     private static final Logger log = LogManager.getLogger(MatchMakerController.class);
@@ -37,10 +34,9 @@ public class MatchMakerController {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> join(@RequestParam("name") String name) {
-        log.info("I here");
         log.info("New connection  name=" + name);
         ConnectionQueue.getInstance().offer(new GameSession(0, name));
-/*        while (GameIdQueue.getInstance().isEmpty()) {
+        while (GameIdQueue.getInstance().isEmpty()) {
         }
         try {
             return new ResponseEntity<>(
@@ -52,10 +48,8 @@ public class MatchMakerController {
                     "-1",
                     HttpStatus.OK);
 
-        }*/
-        return new ResponseEntity<>(
-                "2",
-                HttpStatus.OK);
+        }
+
     }
 
     @RequestMapping(

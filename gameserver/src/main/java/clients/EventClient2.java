@@ -25,7 +25,7 @@ public class EventClient2 {
 
             session = fut.get();
 
-            //session.sendMessage(new TextMessage("Hello"));
+            session.sendMessage(new TextMessage("{\"topic\":\"MOVE\",\"data\":{\"direction\":\"UP\"}}"));   //{"direction":"UP" }
 
             while (!stop) {
                 Thread.sleep(100000);
