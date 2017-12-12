@@ -1,13 +1,12 @@
 package boxes;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 public class GameCreatorQueue {
-    private static BlockingQueue<Integer> instance = new LinkedBlockingQueue<>();
+    private static ConcurrentLinkedQueue<Integer> instance = new ConcurrentLinkedQueue<>();
 
-    public static BlockingQueue<Integer> getInstance() {
+    public static ConcurrentLinkedQueue<Integer> getInstance() {
         return instance;
     }
 }

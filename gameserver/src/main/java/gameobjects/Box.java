@@ -13,10 +13,12 @@ public class Box extends Field implements Positionable, Tickable {
     private int y;
     private int id;
     private boolean alive;
+    private GameSession gameSession;
 
-    public Box(int x, int y) {
+    public Box(int x, int y, GameSession gameSession) {
         super(x, y);
         this.id = getId();
+        this.gameSession = gameSession;
         this.alive = true;
         log.info("New box with id {}", id);
     }
@@ -26,7 +28,17 @@ public class Box extends Field implements Positionable, Tickable {
     }
 
     public void tick(long elapsed) {
-
+        if (alive) {
+            if (!gameSession.getCellFromGameArea(getPosition().getX() / 32, getPosition().getY() / 32)
+                    .getState().contains(State.BOX))
+                alive = false;
+        } else gameSession.removeGameObject(this);
     }
 
+    public String toJson() {
+        Point pos = getPosition();
+        String json = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
+                this.getId() + "\",\"material\":\"wood\",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
+        return json;
+    }
 }

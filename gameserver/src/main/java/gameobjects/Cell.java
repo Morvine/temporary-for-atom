@@ -15,6 +15,29 @@ public class Cell extends Bar {
 
     public void addState(State state) {
         this.states.add(state);
+    };
+
+    public int getX() {
+        return this.x*32;
+    }
+    public int getY() {
+        return this.y*32;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Cell cell = (Cell) o;
+        if (this.x == cell.getX() && this.y == cell.getY()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public ArrayList<State> getState() {
