@@ -59,7 +59,6 @@ public class BomberGirl extends Field implements Tickable, Movable {
         } else gameSession.removeGameObject(this);
     }
 
-
     public Point move(Direction direction, long time) {
         if (direction == direction.UP) {
             if (!((this.gameSession.getCellFromGameArea(getPosition().getX() / 32,
@@ -110,11 +109,11 @@ public class BomberGirl extends Field implements Tickable, Movable {
     public String toJson() {
 /*        String jsodn = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
                 this.getId() + ",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";*/
-        String json = "{\"position\":{\"x\":" + getPosition().getX() + "\",\"id\":" +
-                this.getId() + "\",\"velocity\":" +
-                this.velocity + "\",\"maxBombs\":" +
-                this.maxBombs + "\",\"speedModifier\":" +
-                this.speedModifier + "\",\"type\":\"Pawn\"}}";
+        String json = "{\"position\":{\"x\":" + getPosition().getX() + ",\"y\":" + getPosition().getY() + "},\"id\":" +
+                this.getId() + ",\"velocity\":" +
+                this.velocity + ",\"maxBombs\":" +
+                this.maxBombs + ",\"speedModifier\":" +
+                this.speedModifier + ",\"type\":\"Pawn\"}";
         return json;
     }
 

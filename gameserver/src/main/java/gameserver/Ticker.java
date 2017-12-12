@@ -1,6 +1,7 @@
 package gameserver;
 
 
+import boxes.ConnectionPool;
 import gameobjects.GameSession;
 import gameobjects.Tickable;
 import org.slf4j.LoggerFactory;
@@ -20,10 +21,12 @@ public class Ticker {
 
     public void gameLoop(GameSession gameSession) {
         this.gameSession = gameSession;
+        Replicator replicator = new Replicator();
         while (!Thread.currentThread().isInterrupted()) {
             long started = System.currentTimeMillis();
             act(FRAME_TIME);
             long elapsed = System.currentTimeMillis() - started;
+            replicator.writeReplica(gameSession);
             if (elapsed < FRAME_TIME) {
                 log.info("All tick finish at {} ms", elapsed);
                 LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(FRAME_TIME - elapsed));

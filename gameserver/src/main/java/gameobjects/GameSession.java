@@ -14,40 +14,20 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class GameSession implements Tickable {
     private static final Logger log = LogManager.getLogger(GameSession.class);
 
-
-    private ConcurrentHashMap<Point, Wall> inGameWalls = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<Point, Box> inGameBoxes = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, BomberGirl> inGameBomberGirls = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, Wall> inGameWalls = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, Box> inGameBoxes = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Bomb> inGameBombs = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<Point, Ground> inGameGround = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, Ground> inGameGround = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Explosion> inGameExplosions = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<Point, BomberGirl> inGameBomberGirls = new ConcurrentHashMap<>();
 
     private List<GameObject> gameObjects = new ArrayList<>();
     private Cell[][] gameArea = new Cell[17][13];
     private long id;
-    private int playerCount;
 
-    public GameSession(long id, int playerCount) {
+    public GameSession(long id) {
         this.id = id;
-        this.playerCount = playerCount;
     }
-
-
-
-    public String getBomberGirl() {
-        String objjson = "";
-        for (Point p : inGameBomberGirls.keySet()) {
-            BomberGirl obj = inGameBomberGirls.get(p);
-            objjson = objjson + obj.toJson() + ",";
-        }
-        String result = objjson.substring(0, (objjson.length() - 1));
-        return result;
-    }
-
-    public int getGameSessionPlayerCount() {
-        return playerCount;
-    }
-
 
     public List<GameObject> getGameObjects() {
         return new ArrayList<>(gameObjects);
@@ -55,6 +35,24 @@ public class GameSession implements Tickable {
 
     public void addGameObject(GameObject gameObject) {
         gameObjects.add(gameObject);
+        if (gameObject.getClass().getSimpleName().equals("Bomb")) {
+            inGameBombs.put(gameObject.getId(),(Bomb) gameObject);
+        }
+        if (gameObject.getClass().getSimpleName().equals("Box")) {
+            inGameBoxes.put(gameObject.getId(),(Box) gameObject);
+        }
+        if (gameObject.getClass().getSimpleName().equals("BomberGirl")) {
+            inGameBomberGirls.put(gameObject.getId(),(BomberGirl) gameObject);
+        }
+        if (gameObject.getClass().getSimpleName().equals("Explosion")) {
+            inGameExplosions.put(gameObject.getId(),(Explosion) gameObject);
+        }
+        if (gameObject.getClass().getSimpleName().equals("Ground")) {
+            inGameGround.put(gameObject.getId(),(Ground) gameObject);
+        }
+        if (gameObject.getClass().getSimpleName().equals("Wall")) {
+            inGameWalls.put(gameObject.getId(),(Wall) gameObject);
+        }
     }
 
     public void removeGameObject(GameObject gameObject) {
@@ -150,16 +148,12 @@ public class GameSession implements Tickable {
 
     public String jsonStringGround() {
         String objjson = "";
-        for (Point p : inGameGround.keySet()) {
+        for (Integer p : inGameGround.keySet()) {
             Ground obj = inGameGround.get(p);
             objjson = objjson + obj.toJson() + ",";
         }
         String result = objjson.substring(0, (objjson.length() - 1));
         return result;
-    }
-
-
-    public void setToGameWals(Wall wall, Point point){
     }
 
 
@@ -193,7 +187,7 @@ public class GameSession implements Tickable {
 
     public String jsonStringBoxes() {
         String objjson = "";
-        for (Point p : inGameBoxes.keySet()) {
+        for (Integer p : inGameBoxes.keySet()) {
             Box obj = inGameBoxes.get(p);
             objjson = objjson + obj.toJson() + ",";
         }
@@ -203,8 +197,18 @@ public class GameSession implements Tickable {
 
     public String jsonStringWalls() {
         String objjson = "";
-        for (Point p : inGameWalls.keySet()) {
+        for (Integer p : inGameWalls.keySet()) {
             Wall obj = inGameWalls.get(p);
+            objjson = objjson + obj.toJson() + ",";
+        }
+        String result = objjson.substring(0, (objjson.length() - 1));
+        return result;
+    }
+
+    public String jsonBomberGirl() {
+        String objjson = "";
+        for (Integer p : inGameBomberGirls.keySet()) {
+            BomberGirl obj = inGameBomberGirls.get(p);
             objjson = objjson + obj.toJson() + ",";
         }
         String result = objjson.substring(0, (objjson.length() - 1));

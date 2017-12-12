@@ -44,7 +44,7 @@ public class GameMechanics implements Runnable {
         while (!playerQueue.isEmpty()) {
             log.info(playerQueue.poll());
         }
-        GameSession gameSession = new GameSession((int) id, playerCount);
+        GameSession gameSession = new GameSession((int) id);
         gameSession.initGameArea();
         GameSessionMap.getInstance().add((int) id, gameSession);
         String string = "{\n" +
@@ -55,9 +55,7 @@ public class GameMechanics implements Runnable {
                 "       \"gameOver\":false\n" +
                 "   }\n" +
                 "}";
-        while (!Thread.currentThread().isInterrupted()) {
-            Broker.getInstance().send("Kek", Topic.REPLICA, string);
-        }
+
         /*for (int y = 0; y < 13; y++) {
             for (int x = 0; x < 17; x++)
                 System.out.print(gameSession.getCellFromGameArea(x, y).getState());
@@ -71,7 +69,6 @@ public class GameMechanics implements Runnable {
 
     public GameMechanics(int playerCount) {
         this.playerCount = playerCount;
-
     }
 
 
@@ -90,11 +87,11 @@ public class GameMechanics implements Runnable {
 
 
 
- /*   public BomberGirl getBomberGirl() {
+    public BomberGirl getBomberGirl() {
         WebSocketSession session = null;
         BomberGirl bomberGirl = new BomberGirl(1, 2, session, 32332);
         return bomberGirl;
-    }*/
+    }
 
     /*private GameSession getGameSession(int id) {
 

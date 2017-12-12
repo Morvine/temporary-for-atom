@@ -38,7 +38,7 @@ public class Box extends Field implements Positionable, Tickable {
     public String toJson() {
         Point pos = getPosition();
         String json = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
-                this.getId() + "\",\"material\":\"wood\",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
+                this.getId() + ",\"material\":\"wood\",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
         return json;
     }
 }
