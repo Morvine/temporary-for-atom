@@ -1,3 +1,6 @@
 rootProject.name = 'vinishko'
 include 'GameServer'
+include 'bomberman/frontend'
+include 'matchmaker'
+
 

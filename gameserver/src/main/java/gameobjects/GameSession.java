@@ -1,8 +1,10 @@
 package gameobjects;
 
 import boxes.ConnectionPool;
+import gameserver.Broker;
 import gameserver.Ticker;
 import geometry.Point;
+import message.Topic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.socket.WebSocketSession;
@@ -164,7 +166,6 @@ public class GameSession implements Tickable {
         String result = objjson.substring(0, (objjson.length() - 1));
         return result;
     }
-
 
     public String jsonStringExplosions() {
         if (inGameExplosions.size() == 0) {

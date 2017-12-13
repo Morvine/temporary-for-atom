@@ -1,5 +1,7 @@
 package gameobjects;
 
+import boxes.ConnectionPool;
+import gameserver.Broker;
 import geometry.Point;
 import message.DirectionMessage;
 import message.Input;
@@ -29,9 +31,11 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
         super(x, y);
         this.id = getId();
         this.session = session;
+        this.gameSession = gameSession;
         this.velocity = 0.05;
         this.gameId = gameId;
         log.info("New BomberGirl with id {}", id);
+        Broker.getInstance().send(ConnectionPool.getInstance().getPlayer(session), Topic.POSSESS, id);
     }
 
     public void tick(long elapsed) {
@@ -121,4 +125,5 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     public int compareTo(@NotNull Object o) {
         return 0;
     }
+
 }
