@@ -46,23 +46,23 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
             this.gameSession.removeStateFromCell(x / 32, (y - 1) / 32, State.BOMBERGIRL);
             this.gameSession.addStateToCell(x / 32, (y - 1) / 32, State.EXPLOSION);
             gameSession.addGameObject(new Explosion((x * 32) / 32,
-                    (y * 32) - 1, this.gameSession));
+                    (y * 32) / 32 - 32, this.gameSession));
         }
         if (!this.gameSession.getCellFromGameArea(this.x / 32 + 1, this.y / 32)
                 .getState().contains(State.WALL)) {
             this.gameSession.removeStateFromCell((x + 32) / 32, (y) / 32, State.BOX);
             this.gameSession.removeStateFromCell((x + 32) / 32, (y) / 32, State.BOMBERGIRL);
             this.gameSession.addStateToCell((x + 32) / 32, (y) / 32, State.EXPLOSION);
-            gameSession.addGameObject(new Explosion((x * 32) / 32 + 1,
-                    (y * 32), this.gameSession));
+            gameSession.addGameObject(new Explosion((x * 32) / 32 + 32,
+                    (y * 32) / 32, this.gameSession));
         }
         if (!this.gameSession.getCellFromGameArea(this.x / 32 - 1, this.y / 32)
                 .getState().contains(State.WALL)) {
             this.gameSession.removeStateFromCell((x - 1) / 32, (y) / 32, State.BOX);
             this.gameSession.removeStateFromCell((x - 1) / 32, (y) / 32, State.BOMBERGIRL);
             this.gameSession.addStateToCell((x - 1) / 32, (y) / 32, State.EXPLOSION);
-            gameSession.addGameObject(new Explosion((x * 32) / 32 - 1,
-                    (y * 32), this.gameSession));
+            gameSession.addGameObject(new Explosion((x * 32) / 32 - 32,
+                    (y * 32) / 32, this.gameSession));
         }
 
         this.gameSession.addStateToCell(x / 32, y / 32, State.EXPLOSION);
@@ -87,7 +87,7 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
 
     public String toJson() {
         String json = "{\"type\":\"Bomb\",\"id\":" +
-                this.getId() + ",\"position\":{\"x\":" + getPosition().getX() + ",\"y\":" + getPosition().getY() + "}}";
+                this.getId() + ",\"position\":{\"x\":" + this.x + ",\"y\":" + this.y + "}}";
         return json;
     }
 
