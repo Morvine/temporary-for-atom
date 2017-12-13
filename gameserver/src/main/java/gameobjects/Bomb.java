@@ -67,7 +67,7 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
 
         this.gameSession.addStateToCell(x / 32, y / 32, State.EXPLOSION);
         this.gameSession.addGameObject(new Explosion((x * 32) / 32,
-                (x * 32) / 32, this.gameSession));
+                (y * 32) / 32, this.gameSession));
     }
 
     @Override
