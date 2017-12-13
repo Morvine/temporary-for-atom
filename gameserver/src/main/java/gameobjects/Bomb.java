@@ -87,7 +87,7 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
 
     public String toJson() {
         Point pos = getPosition();
-        String json = "{\"type\":\"bomb\",id\":" +
+        String json = "{\"type\":\"Bomb\",\"id\":" +
                 this.getId() + ",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
         return json;
     }
