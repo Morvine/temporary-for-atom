@@ -12,15 +12,19 @@ public class Explosion extends Field implements Positionable, Tickable, Comparab
     private long time;
     private GameSession gameSession;
     private boolean alive;
+    private int x;
+    private int y;
 
 
     public Explosion(int x, int y, GameSession gameSession) {
         super(x, y);
+        this.x=x;
+        this.y=y;
         this.id = getId();
         this.alive = true;
         this.gameSession = gameSession;
         this.point = getPosition();
-        this.time = 400;
+        this.time = 100;
         log.info("Explosionid = " + id + "; " + "Explosion place = (" + point.getX() + "," +
                 point.getY() + ")" + "; " + "Explosion timer = " + time);
     }
@@ -34,7 +38,10 @@ public class Explosion extends Field implements Positionable, Tickable, Comparab
             } else {
                 time -= elapsed;
             }
-        } else gameSession.removeGameObject(this);
+        } else {
+            gameSession.removeGameObject(this);
+            gameSession.removeStateFromCell(this.x/32,this.y/32, State.EXPLOSION);
+        }
     }
 
     public String toJson() {

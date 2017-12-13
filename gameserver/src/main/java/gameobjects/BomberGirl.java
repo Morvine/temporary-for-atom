@@ -71,9 +71,9 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
             if (!((this.gameSession.getCellFromGameArea(this.x / 32,
                     (this.y + 24 + (int) (time * velocity)) / 32)
                     .getState().contains(State.WALL))
-                    || (this.gameSession.getCellFromGameArea(this.x / 32,
+                    /*|| (this.gameSession.getCellFromGameArea(this.x / 32,
                     (this.y + 24 + (int) (time * velocity)) / 32)
-                    .getState().contains(State.BOMB))
+                    .getState().contains(State.BOMB))*/
                     || (this.gameSession.getCellFromGameArea(this.x / 32,
                     (this.y + 24 + (int) (time * velocity)) / 32)
                     .getState().contains(State.BOX)))) {
@@ -85,9 +85,9 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
             if ((this.gameSession.getCellFromGameArea(this.x / 32,
                     (this.y - (int) (time * velocity)) / 32)
                     .getState().contains(State.WALL))
-                    || (this.gameSession.getCellFromGameArea(this.x / 32,
+                    /*|| (this.gameSession.getCellFromGameArea(this.x / 32,
                     (this.y - (int) (time * velocity)) / 32)
-                    .getState().contains(State.BOMB))
+                    .getState().contains(State.BOMB))*/
                     || (this.gameSession.getCellFromGameArea(this.x / 32,
                     (this.y - (int) (time * velocity)) / 32)
                     .getState().contains(State.BOX))) {
@@ -96,8 +96,8 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
         if (direction == Movable.Direction.LEFT) {
             if ((this.gameSession.getCellFromGameArea((this.x - (int) (time * velocity)) / 32,
                     this.y / 32).getState().contains(State.WALL))
-                    || (this.gameSession.getCellFromGameArea((this.x - (int) (time * velocity)) / 32,
-                    this.y / 32).getState().contains(State.BOMB))
+                    /*|| (this.gameSession.getCellFromGameArea((this.x - (int) (time * velocity)) / 32,
+                    this.y / 32).getState().contains(State.BOMB))*/
                     || (this.gameSession.getCellFromGameArea((this.x - (int) (time * velocity)) / 32,
                     this.y / 32).getState().contains(State.BOX))) {
             } else x = x - (int) (velocity * time);
@@ -105,8 +105,8 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
         if (direction == Movable.Direction.RIGHT) {
             if ((this.gameSession.getCellFromGameArea((this.x + 24 + (int) (time * velocity)) / 32,
                     this.y / 32).getState().contains(State.WALL))
-                    || (this.gameSession.getCellFromGameArea((this.x + 24 + (int) (time * velocity)) / 32,
-                    this.y / 32).getState().contains(State.BOMB))
+                    /*|| (this.gameSession.getCellFromGameArea((this.x + 24 + (int) (time * velocity)) / 32,
+                    this.y / 32).getState().contains(State.BOMB))*/
                     || (this.gameSession.getCellFromGameArea((this.x + 24 + (int) (time * velocity)) / 32,
                     this.y / 32).getState().contains(State.BOX))) {
             } else x = x + (int) (velocity * time);
