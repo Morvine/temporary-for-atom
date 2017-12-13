@@ -11,12 +11,12 @@ public class InputQueue
         return instance;
     }
 
-    public String getDirection(WebSocketSession session) {
+    /*public String getDirection(WebSocketSession session) {
         Input input = null;
         while (input.getSession()!=session) {
             input = InputQueue.getInstance().iterator().next();
         }
         return input.getMessage().getData();
-    }
+    }*/
 
 }

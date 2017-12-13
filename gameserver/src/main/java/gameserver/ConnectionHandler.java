@@ -52,6 +52,7 @@ public class ConnectionHandler extends TextWebSocketHandler implements WebSocket
         //log.info(Broker.getInstance().receive(session,message.getPayload()).getTopic());
         //log.info(Broker.getInstance().receiveDirection(session, Broker.getInstance().receive(session, message.getPayload()).getData()).getDirection());
         InputQueue.getInstance().add(new Input(session, Broker.getInstance().receive(session, message.getPayload())));
+        log.info("smth received");
     }
 
 

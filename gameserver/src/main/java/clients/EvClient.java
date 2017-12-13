@@ -26,9 +26,6 @@ public class EvClient {
 
             session = fut.get();
 
-            String kek = "kek";
-
-            //session.sendMessage(new TextMessage(kek));
             while (!stop) {
                 Thread.sleep(100000);
                 stop=true;

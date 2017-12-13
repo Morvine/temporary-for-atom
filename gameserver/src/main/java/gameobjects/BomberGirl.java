@@ -1,6 +1,7 @@
 package gameobjects;
 
 import boxes.ConnectionPool;
+import boxes.InputQueue;
 import gameserver.Broker;
 import geometry.Point;
 import message.DirectionMessage;
@@ -39,22 +40,25 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     }
 
     public void tick(long elapsed) {
-        //log.info("tick");
+        log.info("tick");
         if (gameSession.getCellFromGameArea(getPosition().getX() / 32, getPosition().getY() / 32)
                 .getState().contains(State.EXPLOSION)) {
             alive = false;
         }
         if (alive) {
             Input input;
+            log.info("producing action");
             if (Input.hasInputForPlayer(session)) {
                 input = Input.getInputForPlayer(session);
-                if (input.getMessage().getTopic() == Topic.MOVE)
+                if (input.getMessage().getTopic() == Topic.MOVE) {
                     move(receiveDirection(session, input.getMessage().getData()).getDirection(), elapsed);
-                else {
+                    InputQueue.getInstance().remove(input);
+                } else {
                     gameSession.addGameObject(new Bomb((getPosition()
                             .getX() / 32) * 32, (getPosition().getY() / 32) * 32, gameSession));
                     gameSession.getCellFromGameArea(getPosition().getX() / 32, getPosition().getY() / 32)
                             .addState(State.BOMB);
+                    InputQueue.getInstance().remove(input);
                 }
             }
         } else gameSession.removeGameObject(this);

@@ -43,7 +43,7 @@ public class GameSession implements Tickable {
 
         if (gameObject.getClass().getSimpleName().equals("Bomb")) {
             inGameBombs.put(gameObject.getId(),(Bomb) gameObject);
-            ticker.registerTickable((Bomb) gameObject);
+            ticker.registerTickable((Tickable) gameObject);
         }
         if (gameObject.getClass().getSimpleName().equals("Box")) {
             inGameBoxes.put(gameObject.getId(),(Box) gameObject);
@@ -51,11 +51,11 @@ public class GameSession implements Tickable {
         }
         if (gameObject.getClass().getSimpleName().equals("BomberGirl")) {
             inGameBomberGirls.put(gameObject.getId(),(BomberGirl) gameObject);
-            ticker.registerTickable((BomberGirl) gameObject);
+            ticker.registerTickable((Tickable) gameObject);
         }
         if (gameObject.getClass().getSimpleName().equals("Explosion")) {
             inGameExplosions.put(gameObject.getId(),(Explosion) gameObject);
-            ticker.registerTickable((Explosion) gameObject);
+            ticker.registerTickable((Tickable) gameObject);
         }
         if (gameObject.getClass().getSimpleName().equals("Ground")) {
             inGameGround.put(gameObject.getId(),(Ground) gameObject);
@@ -72,20 +72,21 @@ public class GameSession implements Tickable {
     }
 
     public void initGameArea() {
+
         for (int x = 0; x < 17; x++) {
             for (int y = 0; y < 13; y++) {
                 if ((x == 0) || (x == 16)) {
                     addGameObject(new Wall(x * 32, y * 32));
-                    gameArea[x][y] = new Cell(x * 32, y * 32, State.WALL);
+                    gameArea[x][y] = new Cell(x , y , State.WALL);
                 } else if (x % 2 != 0) {
                     if ((y == 0) || (y == 12)) {
                         addGameObject(new Wall(x * 32, y * 32));
-                        gameArea[x][y] = new Cell(x * 32, y * 32, State.WALL);
+                        gameArea[x][y] = new Cell(x , y , State.WALL);
                     }
                 } else {
                     if (y % 2 == 0) {
                         addGameObject(new Wall(x * 32, y * 32));
-                        gameArea[x][y] = new Cell(x * 32, y * 32, State.WALL);
+                        gameArea[x][y] = new Cell(x , y , State.WALL);
                     }
                 }
             }
@@ -94,11 +95,11 @@ public class GameSession implements Tickable {
             for (int y = 1; y < 12; y++) {
                 if ((x % 2) != 0) {
                     addGameObject(new Ground(x * 32, y * 32));
-                    gameArea[x][y] = new Cell(x * 32, y * 32, State.GROUND);
+                    gameArea[x][y] = new Cell(x , y , State.GROUND);
                 } else {
                     if (y % 2 != 0) {
                         addGameObject(new Ground(x * 32, y * 32));
-                        gameArea[x][y] = new Cell(x * 32, y * 32, State.GROUND);
+                        gameArea[x][y] = new Cell(x , y , State.GROUND);
                     }
                 }
             }

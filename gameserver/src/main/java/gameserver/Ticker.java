@@ -6,6 +6,7 @@ import gameobjects.Tickable;
 import org.slf4j.LoggerFactory;
 
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
@@ -14,7 +15,7 @@ public class Ticker {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(Ticker.class);
     private static final int FPS = 60;
     private static final long FRAME_TIME = 1000 / FPS;
-    private Set<Tickable> tickables = new ConcurrentSkipListSet<>();
+    private ConcurrentLinkedQueue<Tickable> tickables = new ConcurrentLinkedQueue<>();
     private long tickNumber = 0;
     private GameSession gameSession;
 
@@ -47,11 +48,12 @@ public class Ticker {
     }
 
     private void act(long elapsed) {
-        tickables.forEach(tickable -> tickable.tick(elapsed));
+        /*Tickable[] tickers = tickables.toArray(new Tickable[tickables.size()]);
+        for (int i=0; i<tickers.length;i++)
+            tickers[i].tick(elapsed);*/
+
+                tickables.forEach(tickable -> tickable.tick(elapsed));
     }
-    /*private void act(long elapsed) {
-        for (Tickable tickable: GameSession().getGameObjects());
-    }*/
 
     public long getTickNumber() {
         return tickNumber;

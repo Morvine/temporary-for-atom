@@ -26,6 +26,7 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
 
     public void bang(int x,int y)
     {
+        log.info("KaBoom!");
         if (this.gameSession.getCellFromGameArea(getPosition().getX()/32, getPosition().getY()/32+1)
                 .getState().contains(State.WALL))
         {
@@ -33,7 +34,7 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
             this.gameSession.removeStateFromCell( x/32,(y+32)/32, State.BOMBERGIRL);
             this.gameSession.addStateToCell( x/32,(y+32)/32, State.EXPLOSION);
             gameSession.addGameObject(new Explosion((getPosition().getX()*32)/32,
-                    (getPosition().getY()*32)/32+1,this.gameSession));
+                     (getPosition().getY()*32)/32+1,this.gameSession));
         }
 
         if (this.gameSession.getCellFromGameArea(getPosition().getX()/32, getPosition().getY()/32-1)
@@ -71,6 +72,7 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
 
     @Override
     public void tick(long elapsed) {
+        log.info("bomb {} tick", id);
         if (alive) {
             if (time < elapsed) {
                 time = 0;
@@ -85,7 +87,7 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
 
     public String toJson() {
         Point pos = getPosition();
-        String json = "{\"type\":\"" + this.getClass().getSimpleName() + "\",id\":" +
+        String json = "{\"type\":\"bomb\",id\":" +
                 this.getId() + ",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
         return json;
     }
