@@ -30,10 +30,12 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
 
     public BomberGirl(int x, int y, WebSocketSession session, GameSession gameSession) {
         super(x, y);
+        this.x = x;
+        this.y = y;
         this.id = getId();
         this.session = session;
         this.gameSession = gameSession;
-        this.velocity = 0.05;
+        this.velocity = 0.2;
         this.gameId = gameId;
         log.info("New BomberGirl with id {}", id);
         Broker.getInstance().send(ConnectionPool.getInstance().getPlayer(session), Topic.POSSESS, id);
@@ -41,7 +43,7 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
 
     public void tick(long elapsed) {
         log.info("tick");
-        if (gameSession.getCellFromGameArea(getPosition().getX() / 32, getPosition().getY() / 32)
+        if (gameSession.getCellFromGameArea(this.x / 32, this.y / 32)
                 .getState().contains(State.EXPLOSION)) {
             alive = false;
         }
@@ -55,9 +57,8 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
                     move(receiveDirection(session, input.getMessage().getData()).getDirection(), elapsed);
                     InputQueue.getInstance().remove(input);
                 } else {
-                    gameSession.addGameObject(new Bomb((getPosition()
-                            .getX() / 32) * 32, (getPosition().getY() / 32) * 32, gameSession));
-                    gameSession.getCellFromGameArea(getPosition().getX() / 32, getPosition().getY() / 32)
+                    gameSession.addGameObject(new Bomb((this.x / 32) * 32, (this.y / 32) * 32, gameSession));
+                    gameSession.getCellFromGameArea(this.x / 32, this.y / 32)
                             .addState(State.BOMB);
                     InputQueue.getInstance().remove(input);
                 }
@@ -67,54 +68,54 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
 
     public Point move(Movable.Direction direction, long time) {
         if (direction == Movable.Direction.UP) {
-            if (!((this.gameSession.getCellFromGameArea(getPosition().getX() / 32,
-                    (getPosition().getY() + 24 + (int) (time * velocity)) / 32)
+            if (!((this.gameSession.getCellFromGameArea(this.x / 32,
+                    (this.y + 24 + (int) (time * velocity)) / 32)
                     .getState().contains(State.WALL))
-                    || (this.gameSession.getCellFromGameArea(getPosition().getX() / 32,
-                    (getPosition().getY() + 24 + (int) (time * velocity)) / 32)
+                    || (this.gameSession.getCellFromGameArea(this.x / 32,
+                    (this.y + 24 + (int) (time * velocity)) / 32)
                     .getState().contains(State.BOMB))
-                    || (this.gameSession.getCellFromGameArea(getPosition().getX() / 32,
-                    (getPosition().getY() + 24 + (int) (time * velocity)) / 32)
+                    || (this.gameSession.getCellFromGameArea(this.x / 32,
+                    (this.y + 24 + (int) (time * velocity)) / 32)
                     .getState().contains(State.BOX)))) {
                 this.y = this.y + (int) (velocity * time);
             }
-            log.info(y);
+            log.info(this.y);
         }
         if (direction == Movable.Direction.DOWN) {
-            if ((this.gameSession.getCellFromGameArea(getPosition().getX() / 32,
-                    (getPosition().getY() - (int) (time * velocity)) / 32)
+            if ((this.gameSession.getCellFromGameArea(this.x / 32,
+                    (this.y - (int) (time * velocity)) / 32)
                     .getState().contains(State.WALL))
-                    || (this.gameSession.getCellFromGameArea(getPosition().getX() / 32,
-                    (getPosition().getY() - (int) (time * velocity)) / 32)
+                    || (this.gameSession.getCellFromGameArea(this.x / 32,
+                    (this.y - (int) (time * velocity)) / 32)
                     .getState().contains(State.BOMB))
-                    || (this.gameSession.getCellFromGameArea(getPosition().getX() / 32,
-                    (getPosition().getY() - (int) (time * velocity)) / 32)
+                    || (this.gameSession.getCellFromGameArea(this.x / 32,
+                    (this.y - (int) (time * velocity)) / 32)
                     .getState().contains(State.BOX))) {
             } else y = y - (int) (velocity * time);
         }
         if (direction == Movable.Direction.LEFT) {
-            if ((this.gameSession.getCellFromGameArea((getPosition().getX() - (int) (time * velocity)) / 32,
-                    getPosition().getY() / 32).getState().contains(State.WALL))
-                    || (this.gameSession.getCellFromGameArea((getPosition().getX() - (int) (time * velocity)) / 32,
-                    getPosition().getY() / 32).getState().contains(State.BOMB))
-                    || (this.gameSession.getCellFromGameArea((getPosition().getX() - (int) (time * velocity)) / 32,
-                    getPosition().getY() / 32).getState().contains(State.BOX))) {
+            if ((this.gameSession.getCellFromGameArea((this.x - (int) (time * velocity)) / 32,
+                    this.y / 32).getState().contains(State.WALL))
+                    || (this.gameSession.getCellFromGameArea((this.x - (int) (time * velocity)) / 32,
+                    this.y / 32).getState().contains(State.BOMB))
+                    || (this.gameSession.getCellFromGameArea((this.x - (int) (time * velocity)) / 32,
+                    this.y / 32).getState().contains(State.BOX))) {
             } else x = x - (int) (velocity * time);
         }
         if (direction == Movable.Direction.RIGHT) {
-            if ((this.gameSession.getCellFromGameArea((getPosition().getX() + 24 + (int) (time * velocity)) / 32,
-                    getPosition().getY() / 32).getState().contains(State.WALL))
-                    || (this.gameSession.getCellFromGameArea((getPosition().getX() + 24 + (int) (time * velocity)) / 32,
-                    getPosition().getY() / 32).getState().contains(State.BOMB))
-                    || (this.gameSession.getCellFromGameArea((getPosition().getX() + 24 + (int) (time * velocity)) / 32,
-                    getPosition().getY() / 32).getState().contains(State.BOX))) {
+            if ((this.gameSession.getCellFromGameArea((this.x + 24 + (int) (time * velocity)) / 32,
+                    this.y / 32).getState().contains(State.WALL))
+                    || (this.gameSession.getCellFromGameArea((this.x + 24 + (int) (time * velocity)) / 32,
+                    this.y / 32).getState().contains(State.BOMB))
+                    || (this.gameSession.getCellFromGameArea((this.x + 24 + (int) (time * velocity)) / 32,
+                    this.y / 32).getState().contains(State.BOX))) {
             } else x = x + (int) (velocity * time);
         }
-        return getPosition();
+        return new Point(this.x, this.y);
     }
 
     public String toJson() {
-        String json = "{\"position\":{\"x\":" + getPosition().getX() + ",\"y\":" + getPosition().getY() + "},\"id\":" +
+        String json = "{\"position\":{\"x\":" + this.x + ",\"y\":" + this.y + "},\"id\":" +
                 this.getId() + ",\"velocity\":" +
                 this.velocity + ",\"maxBombs\":" +
                 this.maxBombs + ",\"speedModifier\":" +
