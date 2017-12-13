@@ -75,9 +75,10 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
         log.info("bomb {} tick", id);
         if (alive) {
             if (time < elapsed) {
+                bang(getPosition().getX(),getPosition().getY());
                 time = 0;
                 alive=false;
-                bang(getPosition().getX(),getPosition().getY());
+                /*bang(getPosition().getX(),getPosition().getY());*/
             } else {
                 time -= elapsed;
             }

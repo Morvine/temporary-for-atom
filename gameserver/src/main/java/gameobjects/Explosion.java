@@ -19,9 +19,9 @@ public class Explosion extends Field implements Positionable, Tickable, Comparab
         this.id = getId();
         this.alive = true;
         this.gameSession = gameSession;
-        this.point = getPosition();
+        this.point = new Point(x,y);;
         this.time = 400;
-        log.info("Explosionid = " + id + "; " + "Explosion place = (" + point.getX() + "," +
+       log.info("Explosionid = " + id + "; " + "Explosion place = (" + point.getX() + "," +
                 point.getY() + ")" + "; " + "Explosion timer = " + time);
     }
 
@@ -46,7 +46,7 @@ public class Explosion extends Field implements Positionable, Tickable, Comparab
 
     @Override
     public Point getPosition() {
-        return null;
+        return this.point;
     }
 
     @Override
