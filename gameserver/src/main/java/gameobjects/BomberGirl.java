@@ -1,7 +1,5 @@
 package gameobjects;
 
-import boxes.ConnectionPool;
-import boxes.GameSessionMap;
 import geometry.Point;
 import message.DirectionMessage;
 import message.Input;
@@ -13,7 +11,7 @@ import org.springframework.web.socket.WebSocketSession;
 import util.JsonHelper;
 
 
-public class BomberGirl extends Field implements Tickable, Movable {
+public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     private static final Logger log = LogManager.getLogger(BomberGirl.class);
     private int x;
     private int y;
@@ -27,13 +25,12 @@ public class BomberGirl extends Field implements Tickable, Movable {
     private WebSocketSession session;
     private GameSession gameSession;
 
-    public BomberGirl(int x, int y, WebSocketSession session, int gameId) {
+    public BomberGirl(int x, int y, WebSocketSession session, GameSession gameSession) {
         super(x, y);
         this.id = getId();
         this.session = session;
         this.velocity = 0.05;
         this.gameId = gameId;
-        this.gameSession = GameSessionMap.getInstance().getGameSession(gameId);
         log.info("New BomberGirl with id {}", id);
     }
 
@@ -107,13 +104,11 @@ public class BomberGirl extends Field implements Tickable, Movable {
     }
 
     public String toJson() {
-/*        String jsodn = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
-                this.getId() + ",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";*/
-        String json = "{\"position\":{\"x\":" + getPosition().getX() + "\",\"id\":" +
-                this.getId() + "\",\"velocity\":" +
-                this.velocity + "\",\"maxBombs\":" +
-                this.maxBombs + "\",\"speedModifier\":" +
-                this.speedModifier + "\",\"type\":\"Pawn\"}}";
+        String json = "{\"position\":{\"x\":" + getPosition().getX() + ",\"y\":" + getPosition().getY() + "},\"id\":" +
+                this.getId() + ",\"velocity\":" +
+                this.velocity + ",\"maxBombs\":" +
+                this.maxBombs + ",\"speedModifier\":" +
+                this.speedModifier + ",\"type\":\"Pawn\"}";
         return json;
     }
 
@@ -122,4 +117,8 @@ public class BomberGirl extends Field implements Tickable, Movable {
         return message;
     }
 
+    @Override
+    public int compareTo(@NotNull Object o) {
+        return 0;
+    }
 }

@@ -3,8 +3,9 @@ package gameobjects;
 import geometry.Point;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
-public class Explosion extends Field implements Positionable, Tickable {
+public class Explosion extends Field implements Positionable, Tickable, Comparable {
     private static final Logger log = LogManager.getLogger(Bomb.class);
     private final int id;
     private Point point;
@@ -50,6 +51,11 @@ public class Explosion extends Field implements Positionable, Tickable {
 
     @Override
     public int getId() {
+        return 0;
+    }
+
+    @Override
+    public int compareTo(@NotNull Object o) {
         return 0;
     }
 }

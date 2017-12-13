@@ -38,7 +38,8 @@ public class Broker {
     }
 
     public void broadcast(@NotNull Topic topic, @NotNull Object object) {
-        String message = JsonHelper.toJson(new Message(topic, JsonHelper.toJson(object)));
+        String message = "{\"topic\":\"REPLICA\",\"data\":{ \"objects\":[" + object + "], \"gameOver\":false}}";
+        log.info(message);
         connectionPool.broadcast(message);
     }
 

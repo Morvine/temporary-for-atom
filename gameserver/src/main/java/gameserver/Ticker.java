@@ -1,6 +1,6 @@
 package gameserver;
 
-
+import boxes.ConnectionPool;
 import gameobjects.GameSession;
 import gameobjects.Tickable;
 import org.slf4j.LoggerFactory;
@@ -30,6 +30,8 @@ public class Ticker {
             } else {
                 log.warn("tick lag {} ms", elapsed - FRAME_TIME);
             }
+            Replicator replicator = new Replicator();
+            replicator.writeReplica(gameSession);
             log.info("{}: tick ", tickNumber);
             tickNumber++;
         }
@@ -37,6 +39,7 @@ public class Ticker {
 
     public void registerTickable(Tickable tickable) {
         tickables.add(tickable);
+        log.info("{} registered", tickable.getClass().getSimpleName());
     }
 
     public void unregisterTickable(Tickable tickable) {

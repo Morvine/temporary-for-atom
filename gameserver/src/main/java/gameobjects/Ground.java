@@ -19,8 +19,8 @@ public class Ground extends Field implements Positionable {
 
     public String toJson() {
         Point pos = getPosition();
-        String json = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
-                this.getId() + "\",\"material\":\"grass\",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
+        String json = "{\"type\":\"grass\",\"id\":" +
+                this.getId() + ",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
         return json;
     }
 

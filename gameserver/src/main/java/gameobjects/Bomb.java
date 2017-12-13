@@ -3,8 +3,9 @@ package gameobjects;
 import geometry.Point;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
-public class Bomb extends Field implements Positionable, Tickable {
+public class Bomb extends Field implements Positionable, Tickable, Comparable {
     private static final Logger log = LogManager.getLogger(Bomb.class);
     private final int id;
     private Point position;
@@ -84,8 +85,13 @@ public class Bomb extends Field implements Positionable, Tickable {
 
     public String toJson() {
         Point pos = getPosition();
-        String json = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
+        String json = "{\"type\":\"" + this.getClass().getSimpleName() + "\",id\":" +
                 this.getId() + ",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
         return json;
+    }
+
+    @Override
+    public int compareTo(@NotNull Object o) {
+        return 0;
     }
 }
