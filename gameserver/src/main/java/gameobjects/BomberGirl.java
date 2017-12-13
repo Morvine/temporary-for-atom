@@ -1,7 +1,8 @@
 package gameobjects;
 
 import boxes.ConnectionPool;
-import boxes.GameSessionMap;
+import boxes.InputQueue;
+import gameserver.Broker;
 import geometry.Point;
 import message.DirectionMessage;
 import message.Input;
@@ -13,7 +14,7 @@ import org.springframework.web.socket.WebSocketSession;
 import util.JsonHelper;
 
 
-public class BomberGirl extends Field implements Tickable, Movable {
+public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     private static final Logger log = LogManager.getLogger(BomberGirl.class);
     private int x;
     private int y;
@@ -27,33 +28,37 @@ public class BomberGirl extends Field implements Tickable, Movable {
     private WebSocketSession session;
     private GameSession gameSession;
 
-    public BomberGirl(int x, int y, WebSocketSession session, int gameId) {
+    public BomberGirl(int x, int y, WebSocketSession session, GameSession gameSession) {
         super(x, y);
         this.id = getId();
         this.session = session;
+        this.gameSession = gameSession;
         this.velocity = 0.05;
         this.gameId = gameId;
-        this.gameSession = GameSessionMap.getInstance().getGameSession(gameId);
         log.info("New BomberGirl with id {}", id);
+        Broker.getInstance().send(ConnectionPool.getInstance().getPlayer(session), Topic.POSSESS, id);
     }
 
     public void tick(long elapsed) {
-        //log.info("tick");
+        log.info("tick");
         if (gameSession.getCellFromGameArea(getPosition().getX() / 32, getPosition().getY() / 32)
                 .getState().contains(State.EXPLOSION)) {
             alive = false;
         }
         if (alive) {
             Input input;
+            log.info("producing action");
             if (Input.hasInputForPlayer(session)) {
                 input = Input.getInputForPlayer(session);
-                if (input.getMessage().getTopic() == Topic.MOVE)
+                if (input.getMessage().getTopic() == Topic.MOVE) {
                     move(receiveDirection(session, input.getMessage().getData()).getDirection(), elapsed);
-                else {
+                    InputQueue.getInstance().remove(input);
+                } else {
                     gameSession.addGameObject(new Bomb((getPosition()
                             .getX() / 32) * 32, (getPosition().getY() / 32) * 32, gameSession));
                     gameSession.getCellFromGameArea(getPosition().getX() / 32, getPosition().getY() / 32)
                             .addState(State.BOMB);
+                    InputQueue.getInstance().remove(input);
                 }
             }
         } else gameSession.removeGameObject(this);
@@ -107,8 +112,6 @@ public class BomberGirl extends Field implements Tickable, Movable {
     }
 
     public String toJson() {
-/*        String jsodn = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
-                this.getId() + ",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";*/
         String json = "{\"position\":{\"x\":" + getPosition().getX() + ",\"y\":" + getPosition().getY() + "},\"id\":" +
                 this.getId() + ",\"velocity\":" +
                 this.velocity + ",\"maxBombs\":" +
@@ -120,6 +123,11 @@ public class BomberGirl extends Field implements Tickable, Movable {
     public DirectionMessage receiveDirection(@NotNull WebSocketSession session, @NotNull String msg) {
         DirectionMessage message = JsonHelper.fromJson(msg, DirectionMessage.class);
         return message;
+    }
+
+    @Override
+    public int compareTo(@NotNull Object o) {
+        return 0;
     }
 
 }

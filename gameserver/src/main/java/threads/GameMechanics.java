@@ -1,18 +1,14 @@
 package threads;
 
 import boxes.ConnectionPool;
-import boxes.GameSessionMap;
-import gameserver.Broker;
-import gameserver.Replicator;
 import gameserver.Ticker;
-import geometry.Point;
-import message.Topic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.LockSupport;
 
 import boxes.GameStarterQueue;
 
@@ -24,18 +20,17 @@ public class GameMechanics implements Runnable {
     private static final Logger log = LogManager.getLogger(GameMechanics.class);
     private static AtomicLong idGenerator = new AtomicLong();
     private int playerCount;
-
-
     private long id = idGenerator.getAndIncrement() + 1;
+
+    public GameMechanics(int playerCount) {
+        this.playerCount = playerCount;
+    }
 
     @Override
     public void run() {
 
         while (!GameStarterQueue.getInstance().contains((int) id)) {
-            try {
-                Thread.sleep(100);
-            } catch (Exception e) {
-            }
+            LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(100));
         }
         GameStarterQueue.getInstance().poll();
         log.info("Game {} started", id);
@@ -44,56 +39,18 @@ public class GameMechanics implements Runnable {
         while (!playerQueue.isEmpty()) {
             log.info(playerQueue.poll());
         }
-        GameSession gameSession = new GameSession((int) id);
+        Ticker ticker = new Ticker();
+        GameSession gameSession = new GameSession((int) id, ticker);
         gameSession.initGameArea();
-        GameSessionMap.getInstance().add((int) id, gameSession);
-        String string = "{\n" +
-                "   \"topic\": \"REPLICA\",\n" +
-                "   \"data\":\n" +
-                "   {\n" +
-                "       \"objects\":[{\"position\":{\"x\":16.0,\"y\":12.0},\"id\":16,\"type\":\"Wall\"},{\"position\":{\"x\":32.0,\"y\":32.0},\"id\":213,\"velocity\":0.05,\"maxBombs\":1,\"bombPower\":1,\"speedModifier\":1.0,\"type\":\"Pawn\"},{\"position\":{\"x\":32.0,\"y\":352.0},\"id\":214,\"velocity\":0.05,\"maxBombs\":1,\"bombPower\":1,\"speedModifier\":1.0,\"type\":\"Pawn\"}],\n" +
-                "       \"gameOver\":false\n" +
-                "   }\n" +
-                "}";
-
         /*for (int y = 0; y < 13; y++) {
             for (int x = 0; x < 17; x++)
                 System.out.print(gameSession.getCellFromGameArea(x, y).getState());
             System.out.print("\n");}*/  //Proverka zapolnenia pol`a
-
-        Ticker ticker = new Ticker();
         ticker.gameLoop(gameSession);
         log.info("Game #{} over", id);
-
     }
-
-    public GameMechanics(int playerCount) {
-        this.playerCount = playerCount;
-    }
-
 
     public long getId() {
         return id;
     }
-
-
-
-    public int getGameSessionPlayerCount() {
-        return playerCount;
-    }
-
-
-
-
-
-
-    public BomberGirl getBomberGirl() {
-        WebSocketSession session = null;
-        BomberGirl bomberGirl = new BomberGirl(1, 2, session, 32332);
-        return bomberGirl;
-    }
-
-    /*private GameSession getGameSession(int id) {
-
-    }*/
 }

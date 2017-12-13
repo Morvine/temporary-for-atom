@@ -1,7 +1,10 @@
 package gameobjects;
 
 import boxes.ConnectionPool;
+import gameserver.Broker;
+import gameserver.Ticker;
 import geometry.Point;
+import message.Topic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.socket.WebSocketSession;
@@ -13,6 +16,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GameSession implements Tickable {
     private static final Logger log = LogManager.getLogger(GameSession.class);
+    private Ticker ticker;
 
     private ConcurrentHashMap<Integer, BomberGirl> inGameBomberGirls = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Wall> inGameWalls = new ConcurrentHashMap<>();
@@ -25,8 +29,9 @@ public class GameSession implements Tickable {
     private Cell[][] gameArea = new Cell[17][13];
     private long id;
 
-    public GameSession(long id) {
+    public GameSession(long id, Ticker ticker) {
         this.id = id;
+        this.ticker = ticker;
     }
 
     public List<GameObject> getGameObjects() {
@@ -35,17 +40,22 @@ public class GameSession implements Tickable {
 
     public void addGameObject(GameObject gameObject) {
         gameObjects.add(gameObject);
+
         if (gameObject.getClass().getSimpleName().equals("Bomb")) {
             inGameBombs.put(gameObject.getId(),(Bomb) gameObject);
+            ticker.registerTickable((Tickable) gameObject);
         }
         if (gameObject.getClass().getSimpleName().equals("Box")) {
             inGameBoxes.put(gameObject.getId(),(Box) gameObject);
+            ticker.registerTickable((Tickable)gameObject);
         }
         if (gameObject.getClass().getSimpleName().equals("BomberGirl")) {
             inGameBomberGirls.put(gameObject.getId(),(BomberGirl) gameObject);
+            ticker.registerTickable((Tickable) gameObject);
         }
         if (gameObject.getClass().getSimpleName().equals("Explosion")) {
             inGameExplosions.put(gameObject.getId(),(Explosion) gameObject);
+            ticker.registerTickable((Tickable) gameObject);
         }
         if (gameObject.getClass().getSimpleName().equals("Ground")) {
             inGameGround.put(gameObject.getId(),(Ground) gameObject);
@@ -58,23 +68,25 @@ public class GameSession implements Tickable {
     public void removeGameObject(GameObject gameObject) {
         log.info("{} was deleted", gameObject.getClass().getSimpleName());
         gameObjects.remove(gameObject);
+        ticker.unregisterTickable((Tickable) gameObject);
     }
 
     public void initGameArea() {
+
         for (int x = 0; x < 17; x++) {
             for (int y = 0; y < 13; y++) {
                 if ((x == 0) || (x == 16)) {
                     addGameObject(new Wall(x * 32, y * 32));
-                    gameArea[x][y] = new Cell(x * 32, y * 32, State.WALL);
+                    gameArea[x][y] = new Cell(x , y , State.WALL);
                 } else if (x % 2 != 0) {
                     if ((y == 0) || (y == 12)) {
                         addGameObject(new Wall(x * 32, y * 32));
-                        gameArea[x][y] = new Cell(x * 32, y * 32, State.WALL);
+                        gameArea[x][y] = new Cell(x , y , State.WALL);
                     }
                 } else {
                     if (y % 2 == 0) {
                         addGameObject(new Wall(x * 32, y * 32));
-                        gameArea[x][y] = new Cell(x * 32, y * 32, State.WALL);
+                        gameArea[x][y] = new Cell(x , y , State.WALL);
                     }
                 }
             }
@@ -83,11 +95,11 @@ public class GameSession implements Tickable {
             for (int y = 1; y < 12; y++) {
                 if ((x % 2) != 0) {
                     addGameObject(new Ground(x * 32, y * 32));
-                    gameArea[x][y] = new Cell(x * 32, y * 32, State.GROUND);
+                    gameArea[x][y] = new Cell(x , y , State.GROUND);
                 } else {
                     if (y % 2 != 0) {
                         addGameObject(new Ground(x * 32, y * 32));
-                        gameArea[x][y] = new Cell(x * 32, y * 32, State.GROUND);
+                        gameArea[x][y] = new Cell(x , y , State.GROUND);
                     }
                 }
             }
@@ -116,10 +128,10 @@ public class GameSession implements Tickable {
             }
         }
         ConcurrentLinkedQueue<WebSocketSession> playerQueue = ConnectionPool.getInstance().getSessionsWithGameId((int) id);
-        addGameObject(new BomberGirl(32, 32, playerQueue.poll(), (int) id));
-        addGameObject(new BomberGirl(480, 32, playerQueue.poll(), (int) id));
-        addGameObject(new BomberGirl(32, 352, playerQueue.poll(), (int) id));
-        addGameObject(new BomberGirl(480, 352, playerQueue.poll(), (int) id));
+        addGameObject(new BomberGirl(32, 32, playerQueue.poll(), this));
+        addGameObject(new BomberGirl(480, 32, playerQueue.poll(), this));
+        addGameObject(new BomberGirl(32, 352, playerQueue.poll(), this));
+        addGameObject(new BomberGirl(480, 352, playerQueue.poll(), this));
         gameArea[1][1].addState(State.BOMBERGIRL);
         gameArea[15][1].addState(State.BOMBERGIRL);
         gameArea[1][11].addState(State.BOMBERGIRL);
@@ -155,7 +167,6 @@ public class GameSession implements Tickable {
         String result = objjson.substring(0, (objjson.length() - 1));
         return result;
     }
-
 
     public String jsonStringExplosions() {
         if (inGameExplosions.size() == 0) {

@@ -2,11 +2,13 @@ package message;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
 import gameobjects.Movable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DirectionMessage {
     private final Movable.Direction direction;
+    private static final Logger log = LoggerFactory.getLogger(DirectionMessage.class);
 
     @JsonCreator
     public DirectionMessage(@JsonProperty("direction") Movable.Direction direction) {
@@ -14,6 +16,7 @@ public class DirectionMessage {
     }
 
     public Movable.Direction getDirection() {
+        log.info("got direction");
         return direction;
     }
 

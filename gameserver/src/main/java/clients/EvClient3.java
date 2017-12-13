@@ -1,20 +1,19 @@
 package clients;
 
+
 import gameserver.ConnectionHandler;
 import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.TextMessage;
-import gameserver.Broker;
 
 import java.io.IOException;
 
-public class EvClient {
+public class EvClient3 {
     public static void main(String[] args) {
 
-        String uri = "ws://localhost:8080/game/connect?gameId=1&name=lol";
+        String uri = "ws://localhost:8080/game/connect?gameId=1&name=bob";
         Boolean stop = false;
-        //Broker broker = Broker.getInstance();
 
         StandardWebSocketClient client = new StandardWebSocketClient();
         WebSocketSession session = null;
@@ -25,6 +24,8 @@ public class EvClient {
             ListenableFuture<WebSocketSession> fut = client.doHandshake(socket, uri);
 
             session = fut.get();
+
+            session.sendMessage(new TextMessage("{\"topic\":\"MOVE\",\"data\":{\"direction\":\"UP\"}}"));   //{"direction":"UP" }
 
             while (!stop) {
                 Thread.sleep(100000);
@@ -45,4 +46,3 @@ public class EvClient {
         }
     }
 }
-

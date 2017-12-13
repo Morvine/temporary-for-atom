@@ -1,3 +1,4 @@
+
 package gameserver;
 
 import boxes.ConnectionPool;
@@ -10,6 +11,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 public class Replicator {
     private static final Logger log = LoggerFactory.getLogger(Replicator.class);
+
     public void writeReplica(GameSession gameSession) {
 
 
@@ -41,14 +43,14 @@ public class Replicator {
                 /*log.info(gameSession.jsonStringGround() + "," + gameSession.jsonStringWalls() +
                         "," + gameSession.jsonStringBoxes() + "," + gameSession.jsonBomberGirl());*/
             } else {
-                Broker.getInstance().broadcast( Topic.REPLICA, gameSession.jsonStringGround() + "," + gameSession.jsonStringWalls() +
+                Broker.getInstance().broadcast(Topic.REPLICA, gameSession.jsonStringGround() + "," + gameSession.jsonStringWalls() +
                         "," + gameSession.jsonStringBoxes() + "," + gameSession.jsonStringExplosions() + "," + gameSession.jsonBomberGirl());
             }
         } else if (gameSession.jsonStringExplosions() == null) {
-            Broker.getInstance().broadcast( Topic.REPLICA, gameSession.jsonStringGround() + "," + gameSession.jsonStringWalls() +
+            Broker.getInstance().broadcast(Topic.REPLICA, gameSession.jsonStringGround() + "," + gameSession.jsonStringWalls() +
                     "," + gameSession.jsonStringBoxes() + "," + gameSession.jsonStringBombs() + "," + gameSession.jsonBomberGirl());
         } else {
-            Broker.getInstance().broadcast( Topic.REPLICA, gameSession.jsonStringGround() + "," + gameSession.jsonStringWalls() +
+            Broker.getInstance().broadcast(Topic.REPLICA, gameSession.jsonStringGround() + "," + gameSession.jsonStringWalls() +
                     "," + gameSession.jsonStringBoxes() + "," + gameSession.jsonStringBombs() + "," + gameSession.jsonStringExplosions() + "," + gameSession.jsonBomberGirl());
         }
     }
