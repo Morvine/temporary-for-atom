@@ -39,19 +39,9 @@ public class Explosion extends Field implements Positionable, Tickable, Comparab
 
     public String toJson() {
         Point pos = getPosition();
-        String json = "{\"type\":\"" + this.getClass().getSimpleName() + "\",\"id\":" +
+        String json = "{\"type\":\"Fire\",\"id\":" +
                 this.getId() + ",\"position\":{\"x\":" + pos.getX() + ",\"y\":" + pos.getY() + "}}";
         return json;
-    }
-
-    @Override
-    public Point getPosition() {
-        return null;
-    }
-
-    @Override
-    public int getId() {
-        return 0;
     }
 
     @Override
