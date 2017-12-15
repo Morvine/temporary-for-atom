@@ -1,3 +1,4 @@
+
  .container {
     width: 545px;
 }
@@ -23,6 +24,7 @@ h1 {
 }
 
 .html5 {
+    //background: url('../img/html5.png');
     width: 64px;
     height: 64px;
     display: block;
@@ -43,6 +45,10 @@ h1 {
 h1 strong {
     color: #FF4444;
 }
+
+ h1 strong {
+     color: Orange;
+ }
 
 .credits {
     color: gray;
