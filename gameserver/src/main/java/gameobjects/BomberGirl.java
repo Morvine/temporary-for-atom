@@ -45,7 +45,7 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
         log.info("tick");
         if (gameSession.getCellFromGameArea(this.x, this.y)
                 .getState().contains(State.EXPLOSION)) {
-            alive = false;
+            //alive = false;
         }
         if (alive) {
             Input input;
