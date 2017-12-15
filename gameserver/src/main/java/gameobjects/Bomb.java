@@ -34,8 +34,8 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
             this.gameSession.removeStateFromCell(x, y + 32, State.BOX);
             this.gameSession.removeStateFromCell(x, y + 32, State.BOMBERGIRL);
             this.gameSession.addStateToCell(x, y + 32, State.EXPLOSION);
-            gameSession.addGameObject(new Explosion((x * 32) / 32,
-                    (y * 32) / 32 + 32, this.gameSession));
+            gameSession.addGameObject(new Explosion(x,
+                    y + 32, this.gameSession));
         }
 
         if (!this.gameSession.getCellFromGameArea(this.x, this.y - 32)
@@ -43,29 +43,29 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
             this.gameSession.removeStateFromCell(x, y - 32, State.BOX);
             this.gameSession.removeStateFromCell(x, y - 32, State.BOMBERGIRL);
             this.gameSession.addStateToCell(x, y - 32, State.EXPLOSION);
-            gameSession.addGameObject(new Explosion((x * 32) / 32,
-                    (y * 32) / 32 - 32, this.gameSession));
+            gameSession.addGameObject(new Explosion(x,
+                    y - 32, this.gameSession));
         }
         if (!this.gameSession.getCellFromGameArea(this.x + 32, this.y)
                 .getState().contains(State.WALL)) {
             this.gameSession.removeStateFromCell(x + 32, y, State.BOX);
             this.gameSession.removeStateFromCell(x + 32, y, State.BOMBERGIRL);
             this.gameSession.addStateToCell(x + 32, y, State.EXPLOSION);
-            gameSession.addGameObject(new Explosion((x * 32) / 32 + 32,
-                    (y * 32) / 32, this.gameSession));
+            gameSession.addGameObject(new Explosion(x + 32,
+                    y, this.gameSession));
         }
         if (!this.gameSession.getCellFromGameArea(this.x - 32, this.y)
                 .getState().contains(State.WALL)) {
             this.gameSession.removeStateFromCell(x - 32, y, State.BOX);
             this.gameSession.removeStateFromCell(x - 32, y, State.BOMBERGIRL);
             this.gameSession.addStateToCell(x - 32, y, State.EXPLOSION);
-            gameSession.addGameObject(new Explosion((x * 32) / 32 - 32,
-                    (y * 32) / 32, this.gameSession));
+            gameSession.addGameObject(new Explosion(x - 32,
+                    y, this.gameSession));
         }
 
         this.gameSession.addStateToCell(this.x, this.y, State.EXPLOSION);
-        this.gameSession.addGameObject(new Explosion((x * 32) / 32,
-                (y * 32) / 32, this.gameSession));
+        this.gameSession.addGameObject(new Explosion(x,
+                y, this.gameSession));
     }
 
     @Override
