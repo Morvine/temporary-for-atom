@@ -21,8 +21,8 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     private int id;
     private double velocity;
     private boolean alive = true;
-    private int maxBombs = 1;
-    private int bombPower = 1;
+    private int maxBombs;
+    private int bombPower;
     private double speedModifier = 1.0;
     private WebSocketSession session;
     private GameSession gameSession;
@@ -35,6 +35,8 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
         this.session = session;
         this.gameSession = gameSession;
         this.velocity = 0.2;
+        this.bombPower = 1;
+        this.maxBombs = 1;
         log.info("New BomberGirl with id {}", id);
         Broker.getInstance().send(ConnectionPool.getInstance().getPlayer(session), Topic.POSSESS, id);
     }
@@ -55,7 +57,7 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
                     move(receiveDirection(session, input.getMessage().getData()).getDirection(), elapsed);
                     InputQueue.getInstance().remove(input);
                 } else {
-                    gameSession.addGameObject(new Bomb(this.x + 12, this.y + 12, gameSession));
+                    gameSession.addGameObject(new Bomb(this.x + 12, this.y + 12, gameSession, bombPower));
                     gameSession.getCellFromGameArea(this.x, this.y)
                             .addState(State.BOMB);
                     InputQueue.getInstance().remove(input);
