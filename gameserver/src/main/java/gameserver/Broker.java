@@ -39,7 +39,7 @@ public class Broker {
 
     public void broadcast(@NotNull Topic topic, @NotNull Object object) {
         String message = "{\"topic\":\"REPLICA\",\"data\":{ \"objects\":[" + object + "], \"gameOver\":false}}";
-        log.info(message);
+        //log.info(message);
         connectionPool.broadcast(message);
     }
 

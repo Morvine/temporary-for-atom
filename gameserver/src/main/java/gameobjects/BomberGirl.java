@@ -13,6 +13,10 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.web.socket.WebSocketSession;
 import util.JsonHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+
 
 public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     private static final Logger log = LogManager.getLogger(BomberGirl.class);
@@ -26,6 +30,7 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     private double speedModifier = 1.0;
     private WebSocketSession session;
     private GameSession gameSession;
+    protected List<Boolean> bombStatus = new ArrayList<>();
 
     public BomberGirl(int x, int y, WebSocketSession session, GameSession gameSession) {
         super(x, y);
@@ -36,20 +41,20 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
         this.gameSession = gameSession;
         this.velocity = 0.2;
         this.bombPower = 1;
-        this.maxBombs = 1;
+        this.maxBombs = 3;
         log.info("New BomberGirl with id {}", id);
         Broker.getInstance().send(ConnectionPool.getInstance().getPlayer(session), Topic.POSSESS, id);
     }
 
     public void tick(long elapsed) {
-        log.info("tick");
+        //log.info("tick");
         if (gameSession.getCellFromGameArea(this.x + 12, this.y + 12)
                 .getState().contains(State.EXPLOSION)) {
             alive = false;
         }
         if (alive) {
             Input input;
-            log.info("producing action");
+            //log.info("producing action");
             if (Input.hasInputForPlayer(session)) {
                 input = Input.getInputForPlayer(session);
                 if (input.getMessage().getTopic() == Topic.MOVE) {
@@ -60,9 +65,11 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
                     gameSession.addGameObject(new Bomb(this.x + 12, this.y + 12, gameSession, bombPower));
                     gameSession.getCellFromGameArea(this.x, this.y)
                             .addState(State.BOMB);
-                    InputQueue.getInstance().remove(input);
+
                 }
+                InputQueue.getInstance().remove(input);
             }
+
         } else gameSession.removeGameObject(this);
     }
 
