@@ -24,7 +24,6 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     private int maxBombs = 1;
     private int bombPower = 1;
     private double speedModifier = 1.0;
-    private int gameId;
     private WebSocketSession session;
     private GameSession gameSession;
 
@@ -36,14 +35,13 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
         this.session = session;
         this.gameSession = gameSession;
         this.velocity = 0.2;
-        this.gameId = gameId;
         log.info("New BomberGirl with id {}", id);
         Broker.getInstance().send(ConnectionPool.getInstance().getPlayer(session), Topic.POSSESS, id);
     }
 
     public void tick(long elapsed) {
         log.info("tick");
-        if (gameSession.getCellFromGameArea(this.x, this.y)
+        if (gameSession.getCellFromGameArea(this.x + 12, this.y + 12)
                 .getState().contains(State.EXPLOSION)) {
             alive = false;
         }
@@ -67,79 +65,45 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     }
 
     public Point move(Movable.Direction direction, long time) {
+        int shift = (int) (time * velocity);
         if (direction == Movable.Direction.UP) {
-            if (!((this.gameSession.getCellFromGameArea(this.x,
-                    this.y + 24 + (int) (time * velocity))
-                    .getState().contains(State.WALL))
-                    /*|| (this.gameSession.getCellFromGameArea(this.x,
-                    this.y + 24 + (int) (time * velocity))
-                    .getState().contains(State.BOMB))*/
-                    || (this.gameSession.getCellFromGameArea(this.x,
-                    this.y + 24 + (int) (time * velocity))
-                    .getState().contains(State.BOX))) && !((this.gameSession.getCellFromGameArea(this.x + 24,
-                    this.y + 24 + (int) (time * velocity))
-                    .getState().contains(State.WALL))
-                    /*|| (this.gameSession.getCellFromGameArea(this.x,
-                    this.y + 24 + (int) (time * velocity))
-                    .getState().contains(State.BOMB))*/
-                    || (this.gameSession.getCellFromGameArea(this.x + 24,
-                    this.y + 24 + (int) (time * velocity))
-                    .getState().contains(State.BOX)))) {
-                this.y = this.y + (int) (velocity * time);
+            if (!isCellSolid(x, y + 23 + shift) && !isCellSolid(x + 23, y + 23 + shift)) {
+                y = y + (int) (velocity * time);
+            } else if (!isCellSolid(x + 26, y + 23 + shift)) {
+                x = x + shift;
+            } else if (!isCellSolid(x - 2, y + 23 + shift)) {
+                x = x - shift;
             }
             //log.info(this.y);
         }
         if (direction == Movable.Direction.DOWN) {
-            if ((this.gameSession.getCellFromGameArea(this.x,
-                    this.y - (int) (time * velocity))
-                    .getState().contains(State.WALL))
-                    /*|| (this.gameSession.getCellFromGameArea(this.x,
-                    this.y - (int) (time * velocity))
-                    .getState().contains(State.BOMB))*/
-                    || (this.gameSession.getCellFromGameArea(this.x,
-                    this.y - (int) (time * velocity))
-                    .getState().contains(State.BOX)) || (this.gameSession.getCellFromGameArea(this.x + 24,
-                    this.y - (int) (time * velocity))
-                    .getState().contains(State.WALL))
-                    /*|| (this.gameSession.getCellFromGameArea(this.x,
-                    (this.y - (int) (time * velocity)))
-                    .getState().contains(State.BOMB))*/
-                    || (this.gameSession.getCellFromGameArea(this.x + 24,
-                    this.y - (int) (time * velocity))
-                    .getState().contains(State.BOX))) {
-            } else y = y - (int) (velocity * time);
+            if (!isCellSolid(x, y - shift) && !isCellSolid(x + 23, y - shift)) {
+                y = y - shift;
+            } else if (!isCellSolid(x + 26, y - shift)) {
+                x = x + shift;
+            } else if (!isCellSolid(x - 2, y - shift)) {
+                x = x - shift;
+            }
         }
         if (direction == Movable.Direction.LEFT) {
-            if ((this.gameSession.getCellFromGameArea(this.x - (int) (time * velocity),
-                    this.y).getState().contains(State.WALL))
-                    /*|| (this.gameSession.getCellFromGameArea(this.x - (int) (time * velocity),
-                    this.y).getState().contains(State.BOMB))*/
-                    || (this.gameSession.getCellFromGameArea(this.x - (int) (time * velocity),
-                    this.y).getState().contains(State.BOX))
-                    || (this.gameSession.getCellFromGameArea((this.x - (int) (time * velocity)),
-                    this.y + 24).getState().contains(State.WALL))
-                    /*|| (this.gameSession.getCellFromGameArea((this.x - (int) (time * velocity)) ,
-                    this.y ).getState().contains(State.BOMB))*/
-                    || (this.gameSession.getCellFromGameArea((this.x - (int) (time * velocity)),
-                    (this.y + 24)).getState().contains(State.BOX))) {
-            } else x = x - (int) (velocity * time);
+            if (!isCellSolid(x - shift, y) && !isCellSolid(x - shift, y + 23)) {
+                x = x - shift;
+            } else if (!isCellSolid(x - shift, y + 26)) {
+                y = y + shift;
+            } else if (!isCellSolid(x - shift, y - 2)) {
+                y = y - shift;
+            }
         }
         if (direction == Movable.Direction.RIGHT) {
-            if ((this.gameSession.getCellFromGameArea((this.x + 24 + (int) (time * velocity)),
-                    this.y).getState().contains(State.WALL))
-                    /*|| (this.gameSession.getCellFromGameArea((this.x + 24 + (int) (time * velocity)) ,
-                    this.y ).getState().contains(State.BOMB))*/
-                    || (this.gameSession.getCellFromGameArea((this.x + 24 + (int) (time * velocity)),
-                    this.y).getState().contains(State.BOX))
-                    || (this.gameSession.getCellFromGameArea((this.x + 24 + (int) (time * velocity)),
-                    (this.y + 24)).getState().contains(State.WALL))
-                    /*|| (this.gameSession.getCellFromGameArea((this.x + 24 + (int) (time * velocity)) ,
-                    this.y ).getState().contains(State.BOMB))*/
-                    || (this.gameSession.getCellFromGameArea((this.x + 24 + (int) (time * velocity)),
-                    (this.y + 24)).getState().contains(State.BOX))) {
-            } else x = x + (int) (velocity * time);
+            if (!isCellSolid(x + 23 + shift, y) && !isCellSolid(x + 23 + shift, y + 23)) {
+                x = x + shift;
+            } else if (!isCellSolid(x + 23 + shift, y + 26)) {
+                y = y + shift;
+            } else if (!isCellSolid(x + 23 + shift, y - 2)) {
+                y = y - shift;
+            }
         }
-        return new Point(this.x, this.y);
+        return new Point(x, y);
     }
 
     public String toJson() {
@@ -154,6 +118,16 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     public DirectionMessage receiveDirection(@NotNull WebSocketSession session, @NotNull String msg) {
         DirectionMessage message = JsonHelper.fromJson(msg, DirectionMessage.class);
         return message;
+    }
+
+    public boolean isCellSolid(int x, int y) {
+        return (this.gameSession.getCellFromGameArea(x,
+                y).getState().contains(State.WALL)) || (this.gameSession.getCellFromGameArea(x, y)
+                .getState().contains(State.BOX))
+                /*|| (this.gameSession.getCellFromGameArea(coordX,
+                    coordY)
+                    .getState().contains(State.BOMB))*/;
+
     }
 
     @Override

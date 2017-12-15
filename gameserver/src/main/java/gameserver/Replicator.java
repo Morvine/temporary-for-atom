@@ -38,19 +38,19 @@ public class Replicator {
         }*/
         if (gameSession.jsonStringBombs() == null) {
             if (gameSession.jsonStringExplosions() == null) {
-                Broker.getInstance().broadcast(Topic.REPLICA, gameSession.jsonStringGround() + "," + gameSession.jsonStringWalls() +
+                Broker.getInstance().broadcast(Topic.REPLICA, gameSession.jsonStringWalls() +
                         "," + gameSession.jsonStringBoxes() + "," + gameSession.jsonBomberGirl());
                 /*log.info(gameSession.jsonStringGround() + "," + gameSession.jsonStringWalls() +
                         "," + gameSession.jsonStringBoxes() + "," + gameSession.jsonBomberGirl());*/
             } else {
-                Broker.getInstance().broadcast(Topic.REPLICA, gameSession.jsonStringGround() + "," + gameSession.jsonStringWalls() +
+                Broker.getInstance().broadcast(Topic.REPLICA, gameSession.jsonStringWalls() +
                         "," + gameSession.jsonStringBoxes() + "," + gameSession.jsonStringExplosions() + "," + gameSession.jsonBomberGirl());
             }
         } else if (gameSession.jsonStringExplosions() == null) {
-            Broker.getInstance().broadcast(Topic.REPLICA, gameSession.jsonStringGround() + "," + gameSession.jsonStringWalls() +
+            Broker.getInstance().broadcast(Topic.REPLICA, gameSession.jsonStringWalls() +
                     "," + gameSession.jsonStringBoxes() + "," + gameSession.jsonStringBombs() + "," + gameSession.jsonBomberGirl());
         } else {
-            Broker.getInstance().broadcast(Topic.REPLICA, gameSession.jsonStringGround() + "," + gameSession.jsonStringWalls() +
+            Broker.getInstance().broadcast(Topic.REPLICA, gameSession.jsonStringWalls() +
                     "," + gameSession.jsonStringBoxes() + "," + gameSession.jsonStringBombs() + "," + gameSession.jsonStringExplosions() + "," + gameSession.jsonBomberGirl());
         }
     }
