@@ -6,5 +6,9 @@ public enum State {
     EXPLOSION,
     GROUND,
     BOMBERGIRL,
-    WALL
+    WALL,
+    BONUS,
+    BONUSSPEED,
+    BONUSBOMB,
+    BONUSFIRE
 }
