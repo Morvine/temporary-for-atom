@@ -12,10 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.socket.WebSocketSession;
 import util.JsonHelper;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 public class BomberGirl extends Field implements Tickable, Movable, Comparable {
@@ -30,7 +27,7 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     private double speedModifier = 1.0;
     private WebSocketSession session;
     private GameSession gameSession;
-    protected List<Boolean> bombStatus = new ArrayList<>();
+    private ConcurrentLinkedQueue<Boolean> bombStatus = new ConcurrentLinkedQueue<>();
 
     public BomberGirl(int x, int y, WebSocketSession session, GameSession gameSession) {
         super(x, y);
@@ -41,7 +38,7 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
         this.gameSession = gameSession;
         this.velocity = 0.2;
         this.bombPower = 1;
-        this.maxBombs = 3;
+        this.maxBombs = 1;
         log.info("New BomberGirl with id {}", id);
         Broker.getInstance().send(ConnectionPool.getInstance().getPlayer(session), Topic.POSSESS, id);
     }
@@ -53,6 +50,18 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
             alive = false;
         }
         if (alive) {
+            if (gameSession.getCellFromGameArea(x + 12, y + 12).getState().contains(State.BONUSBOMB)) {
+                gameSession.removeStateFromCell(x + 12, y + 12, State.BONUS);
+                this.maxBombs++;
+            }
+            if (gameSession.getCellFromGameArea(x + 12, y + 12).getState().contains(State.BONUSFIRE)) {
+                gameSession.removeStateFromCell(x + 12, y + 12, State.BONUS);
+                this.bombPower++;
+            }
+            if (gameSession.getCellFromGameArea(x + 12, y + 12).getState().contains(State.BONUSSPEED)) {
+                gameSession.removeStateFromCell(x + 12, y + 12, State.BONUS);
+                this.speedModifier++;
+            }
             Input input;
             //log.info("producing action");
             if (Input.hasInputForPlayer(session)) {
@@ -62,11 +71,12 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
                     move(receiveDirection(session, input.getMessage().getData()).getDirection(), elapsed);
                     InputQueue.getInstance().remove(input);
                 } else {
-                    gameSession.addGameObject(new Bomb(this.x + 12, this.y + 12, gameSession, bombPower, this));
-                    gameSession.getCellFromGameArea(this.x, this.y)
-                            .addState(State.BOMB);
-                    bombStatus.add(true);
-
+                    if (maxBombs > bombPlantedCount()) {
+                        gameSession.addGameObject(new Bomb(this.x + 12, this.y + 12, gameSession, bombPower, this));
+                        gameSession.getCellFromGameArea(this.x, this.y)
+                                .addState(State.BOMB);
+                        bombStatus.offer(true);
+                    }
                 }
                 InputQueue.getInstance().remove(input);
             }
@@ -75,7 +85,7 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     }
 
     public Point move(Movable.Direction direction, long time) {
-        int shift = (int) (time * velocity);
+        int shift = (int) (time * velocity * speedModifier);
         if (direction == Movable.Direction.UP) {
             if (!isCellSolid(x, y + 23 + shift) && !isCellSolid(x + 23, y + 23 + shift)) {
                 y = y + (int) (velocity * time);
@@ -115,10 +125,10 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
                 x = x + shift;
             } else if (!isCellSolid(x + 23 + shift, y + 26)) {
                 if (!isCellSolid(x, y + 23 + shift) && !isCellSolid(x + 23, y + 23 + shift))
-                y = y + shift;
+                    y = y + shift;
             } else if (!isCellSolid(x + 23 + shift, y - 2)) {
                 if (!isCellSolid(x, y - shift) && !isCellSolid(x + 23, y - shift))
-                y = y - shift;
+                    y = y - shift;
             }
         }
         return new Point(x, y);
@@ -145,12 +155,26 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
                 /*|| (this.gameSession.getCellFromGameArea(coordX,
                     coordY)
                     .getState().contains(State.BOMB))*/;
-
     }
 
     @Override
     public int compareTo(@NotNull Object o) {
         return 0;
+    }
+
+    public int bombPlantedCount() {
+        int count = 0;
+        for (boolean s : bombStatus) {
+            if (s)
+                count++;
+        }
+        return count;
+    }
+
+    public void changeBombStatus() {
+        for (boolean b : bombStatus)
+            if (b)
+                bombStatus.poll();
     }
 
 

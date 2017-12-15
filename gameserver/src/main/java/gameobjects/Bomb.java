@@ -1,6 +1,5 @@
 package gameobjects;
 
-import geometry.Point;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -85,6 +84,7 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
             if (time < elapsed) {
                 time = 0;
                 alive = false;
+                owner.changeBombStatus();
                 bang();
             } else {
                 time -= elapsed;
@@ -103,4 +103,6 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
     public int compareTo(@NotNull Object o) {
         return 0;
     }
+
 }
+
