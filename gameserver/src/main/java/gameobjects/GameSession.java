@@ -161,15 +161,15 @@ public class GameSession implements Tickable {
     }
 
     public Cell getCellFromGameArea(int x, int y) {
-        return gameArea[x][y];
+        return gameArea[x/32][y/32];
     }
 
     public void addStateToCell(int x, int y, State state) {
-        gameArea[x][y].addState(state);
+        gameArea[x/32][y/32].addState(state);
     }
 
     public boolean removeStateFromCell(int x, int y, State state) {
-        return (gameArea[x][y].getState().remove(state));
+        return (gameArea[x/32][y/32].getState().remove(state));
     }
 
     public int getId() {

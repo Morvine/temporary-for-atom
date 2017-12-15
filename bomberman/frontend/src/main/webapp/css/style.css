@@ -30,6 +30,12 @@ h1 {
     margin-right: 10px;
 }
 
+ .scrollDisabled {
+     position: fixed;
+     margin-top: 0;
+ width: 100%;
+ }
+
 .html5 span {
     display: none;
 }

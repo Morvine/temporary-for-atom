@@ -40,7 +40,7 @@ public class Explosion extends Field implements Positionable, Tickable, Comparab
             }
         } else {
             gameSession.removeGameObject(this);
-            gameSession.removeStateFromCell(this.x/32,this.y/32, State.EXPLOSION);
+            gameSession.removeStateFromCell(this.x,this.y, State.EXPLOSION);
         }
     }
 
