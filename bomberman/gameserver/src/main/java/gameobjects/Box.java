@@ -36,7 +36,7 @@ public class Box extends Field implements Positionable, Tickable, Comparable {
     public void tick(long elapsed) {
         //log.info("box {} tick", id);
         if (alive) {
-            if (!gameSession.getCellFromGameArea(getPosition().getX() / 32, getPosition().getY() / 32)
+            if (!gameSession.getCellFromGameArea(getPosition().getX(), getPosition().getY())
                     .getState().contains(State.BOX))
                 alive = false;
         } else gameSession.removeGameObject(this);

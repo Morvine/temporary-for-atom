@@ -68,6 +68,24 @@ public class GameSession implements Tickable {
     public void removeGameObject(GameObject gameObject) {
         log.info("{} was deleted", gameObject.getClass().getSimpleName());
         gameObjects.remove(gameObject);
+        if (gameObject.getClass().getSimpleName().equals("Bomb")) {
+            inGameBombs.remove(gameObject.getId());
+        }
+        if (gameObject.getClass().getSimpleName().equals("Box")) {
+            inGameBoxes.remove(gameObject.getId());
+        }
+        if (gameObject.getClass().getSimpleName().equals("BomberGirl")) {
+            inGameBomberGirls.remove(gameObject.getId());
+        }
+        if (gameObject.getClass().getSimpleName().equals("Explosion")) {
+            inGameExplosions.remove(gameObject.getId());
+        }
+        if (gameObject.getClass().getSimpleName().equals("Ground")) {
+            inGameGround.remove(gameObject.getId());
+        }
+        if (gameObject.getClass().getSimpleName().equals("Wall")) {
+            inGameWalls.remove(gameObject.getId());
+        }
         ticker.unregisterTickable((Tickable) gameObject);
     }
 
@@ -129,13 +147,13 @@ public class GameSession implements Tickable {
         }
         ConcurrentLinkedQueue<WebSocketSession> playerQueue = ConnectionPool.getInstance().getSessionsWithGameId((int) id);
         addGameObject(new BomberGirl(32, 32, playerQueue.poll(), this));
-        addGameObject(new BomberGirl(480, 32, playerQueue.poll(), this));
-        addGameObject(new BomberGirl(32, 352, playerQueue.poll(), this));
-        addGameObject(new BomberGirl(480, 352, playerQueue.poll(), this));
+        //addGameObject(new BomberGirl(480, 32, playerQueue.poll(), this));
+        /*addGameObject(new BomberGirl(32, 352, playerQueue.poll(), this));
+        addGameObject(new BomberGirl(480, 352, playerQueue.poll(), this));*/
         gameArea[1][1].addState(State.BOMBERGIRL);
-        gameArea[15][1].addState(State.BOMBERGIRL);
-        gameArea[1][11].addState(State.BOMBERGIRL);
-        gameArea[15][11].addState(State.BOMBERGIRL);
+        //gameArea[15][1].addState(State.BOMBERGIRL);
+        /*gameArea[1][11].addState(State.BOMBERGIRL);
+        gameArea[15][11].addState(State.BOMBERGIRL);*/
     }
 
     public Cell[][] getGameArea() {
@@ -143,15 +161,15 @@ public class GameSession implements Tickable {
     }
 
     public Cell getCellFromGameArea(int x, int y) {
-        return gameArea[x][y];
+        return gameArea[x/32][y/32];
     }
 
     public void addStateToCell(int x, int y, State state) {
-        gameArea[x][y].addState(state);
+        gameArea[x/32][y/32].addState(state);
     }
 
     public boolean removeStateFromCell(int x, int y, State state) {
-        return (gameArea[x][y].getState().remove(state));
+        return (gameArea[x/32][y/32].getState().remove(state));
     }
 
     public int getId() {
