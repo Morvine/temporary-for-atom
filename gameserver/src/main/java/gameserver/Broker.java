@@ -1,7 +1,6 @@
 package gameserver;
 
 import boxes.ConnectionPool;
-import message.DirectionMessage;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,16 +31,16 @@ public class Broker {
     }
 
     public void send(@NotNull String player, @NotNull Topic topic, @NotNull Object object) {
-        String message = JsonHelper.toJson(new Message(topic, JsonHelper.toJson(object)));
+        String message = "{\"topic\":\"REPLICA\",\"data\":{ \"objects\":[" + object + "], \"gameOver\":false}}";
+        log.info(message);
         WebSocketSession session = connectionPool.getSession(player);
         connectionPool.send(session, message);
     }
 
     public void broadcast(@NotNull Topic topic, @NotNull Object object) {
         String message = "{\"topic\":\"REPLICA\",\"data\":{ \"objects\":[" + object + "], \"gameOver\":false}}";
-        //log.info(message);
+        log.info(message);
         connectionPool.broadcast(message);
     }
 
 }
-

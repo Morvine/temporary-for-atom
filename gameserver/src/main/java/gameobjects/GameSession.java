@@ -24,6 +24,7 @@ public class GameSession implements Tickable {
     private ConcurrentHashMap<Integer, Bomb> inGameBombs = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Ground> inGameGround = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Explosion> inGameExplosions = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, Bonus> inGameBonus = new ConcurrentHashMap<>();
 
     private List<GameObject> gameObjects = new ArrayList<>();
     private Cell[][] gameArea = new Cell[17][13];
@@ -47,6 +48,10 @@ public class GameSession implements Tickable {
         }
         if (gameObject.getClass().getSimpleName().equals("Box")) {
             inGameBoxes.put(gameObject.getId(),(Box) gameObject);
+            ticker.registerTickable((Tickable)gameObject);
+        }
+        if (gameObject.getClass().getSimpleName().equals("Bonus")) {
+            inGameBonus.put(gameObject.getId(),(Bonus) gameObject);
             ticker.registerTickable((Tickable)gameObject);
         }
         if (gameObject.getClass().getSimpleName().equals("BomberGirl")) {
@@ -73,6 +78,9 @@ public class GameSession implements Tickable {
         }
         if (gameObject.getClass().getSimpleName().equals("Box")) {
             inGameBoxes.remove(gameObject.getId());
+        }
+        if (gameObject.getClass().getSimpleName().equals("Bonus")) {
+            inGameBonus.remove(gameObject.getId());
         }
         if (gameObject.getClass().getSimpleName().equals("BomberGirl")) {
             inGameBomberGirls.remove(gameObject.getId());
@@ -145,9 +153,9 @@ public class GameSession implements Tickable {
                 }
             }
         }
-        ConcurrentLinkedQueue<WebSocketSession> playerQueue = ConnectionPool.getInstance()
-                .getSessionsWithGameId((int) id);
+        ConcurrentLinkedQueue<WebSocketSession> playerQueue = ConnectionPool.getInstance().getSessionsWithGameId((int) id);
         addGameObject(new BomberGirl(32, 32, playerQueue.poll(), this));
+        addGameObject(new Bonus(32, 32, this, 1));
         //addGameObject(new BomberGirl(480, 32, playerQueue.poll(), this));
         /*addGameObject(new BomberGirl(32, 352, playerQueue.poll(), this));
         addGameObject(new BomberGirl(480, 352, playerQueue.poll(), this));*/
@@ -186,6 +194,21 @@ public class GameSession implements Tickable {
         String result = objjson.substring(0, (objjson.length() - 1));
         return result;
     }
+
+    public String jsonStringBonus() {
+        if (inGameBonus.size() == 0) {
+            return null;
+        } else {
+            String objjson = "";
+            for (Integer i : inGameBonus.keySet()) {
+                Bonus obj = inGameBonus.get(i);
+                objjson = objjson + obj.toJson() + ",";
+            }
+            String result = objjson.substring(0, (objjson.length() - 1));
+            return result;
+        }
+    }
+
 
     public String jsonStringExplosions() {
         if (inGameExplosions.size() == 0) {

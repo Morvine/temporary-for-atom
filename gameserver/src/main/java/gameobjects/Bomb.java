@@ -14,9 +14,10 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
     private int x;
     private int y;
     private int bombPower;
+    private BomberGirl owner;
 
 
-    public Bomb(int x, int y, GameSession gameSession, int bombPower) {
+    public Bomb(int x, int y, GameSession gameSession, int bombPower, BomberGirl owner) {
         super((x / 32) * 32, (y / 32) * 32);
         this.x = (x / 32) * 32;
         this.y = (y / 32) * 32;
@@ -25,6 +26,7 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
         this.gameSession = gameSession;
         this.time = 2000;
         this.bombPower = bombPower;
+        this.owner = owner;
         log.info("Bombid = " + id + "; " + "Bomb place = (" + this.x + "," +
                 this.y + ")" + "; " + "Bomb timer = " + time);
     }
