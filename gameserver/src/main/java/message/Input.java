@@ -21,14 +21,27 @@ public class Input {
         return session;
     }
 
-    public static boolean hasInputForPlayer(WebSocketSession session) {
+    public static boolean hasMoveInputForPlayer(WebSocketSession session) {
         Input input;
         if (!InputQueue.getInstance().isEmpty()) {
             /*while (InputQueue.getInstance().iterator().hasNext()) {
                 input = InputQueue.getInstance().iterator().next();*/
             Input[] queue = InputQueue.getInstance().toArray(new Input[InputQueue.getInstance().size()]);
             for (Input i : queue)
-                if (i.getSession() == session)
+                if ((i.getSession() == session)&&(i.getMessage().getTopic()==Topic.MOVE))
+                    return true;
+        }
+        return false;
+    }
+
+    public static boolean hasBombInputForPlayer(WebSocketSession session) {
+        Input input;
+        if (!InputQueue.getInstance().isEmpty()) {
+            /*while (InputQueue.getInstance().iterator().hasNext()) {
+                input = InputQueue.getInstance().iterator().next();*/
+            Input[] queue = InputQueue.getInstance().toArray(new Input[InputQueue.getInstance().size()]);
+            for (Input i : queue)
+                if ((i.getSession() == session)&&(i.getMessage().getTopic()==Topic.PLANT_BOMB))
                     return true;
         }
         return false;

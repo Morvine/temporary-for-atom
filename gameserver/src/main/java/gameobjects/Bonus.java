@@ -28,9 +28,8 @@ public class Bonus extends Field implements Positionable, Tickable, Comparable{
     @Override
     public void tick(long elapsed) {
         if (alive) {
-            if (!gameSession.getCellFromGameArea(getPosition().getX(), getPosition().getY())
-                    .getState().contains(State.BONUS))
-                alive = true;
+            if (!gameSession.getCellFromGameArea(x, y).getState().contains(State.BONUS))
+                alive = false;
         } else gameSession.removeGameObject(this);
     }
 

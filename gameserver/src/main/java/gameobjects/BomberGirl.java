@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.socket.WebSocketSession;
 import util.JsonHelper;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
@@ -52,35 +53,38 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
         if (alive) {
             if (gameSession.getCellFromGameArea(x + 12, y + 12).getState().contains(State.BONUSBOMB)) {
                 gameSession.removeStateFromCell(x + 12, y + 12, State.BONUS);
+                gameSession.removeStateFromCell(x + 12, y + 12, State.BONUSBOMB);
                 this.maxBombs++;
             }
             if (gameSession.getCellFromGameArea(x + 12, y + 12).getState().contains(State.BONUSFIRE)) {
                 gameSession.removeStateFromCell(x + 12, y + 12, State.BONUS);
+                gameSession.removeStateFromCell(x + 12, y + 12, State.BONUSFIRE);
                 this.bombPower++;
+                log.info("Stop");
             }
             if (gameSession.getCellFromGameArea(x + 12, y + 12).getState().contains(State.BONUSSPEED)) {
                 gameSession.removeStateFromCell(x + 12, y + 12, State.BONUS);
+                gameSession.removeStateFromCell(x + 12, y + 12, State.BONUSSPEED);
                 this.speedModifier++;
             }
             Input input;
             //log.info("producing action");
-            if (Input.hasInputForPlayer(session)) {
+            if (Input.hasMoveInputForPlayer(session)) {
                 input = Input.getInputForPlayer(session);
-                if (input.getMessage().getTopic() == Topic.MOVE) {
-                    log.warn(receiveDirection(session, input.getMessage().getData()).getDirection());
-                    move(receiveDirection(session, input.getMessage().getData()).getDirection(), elapsed);
-                    InputQueue.getInstance().remove(input);
-                } else {
-                    if (maxBombs > bombPlantedCount()) {
-                        gameSession.addGameObject(new Bomb(this.x + 12, this.y + 12, gameSession, bombPower, this));
-                        gameSession.getCellFromGameArea(this.x, this.y)
-                                .addState(State.BOMB);
-                        bombStatus.offer(true);
-                    }
-                }
+                log.warn(receiveDirection(session, input.getMessage().getData()).getDirection());
+                move(receiveDirection(session, input.getMessage().getData()).getDirection(), elapsed);
                 InputQueue.getInstance().remove(input);
             }
-
+            if (Input.hasBombInputForPlayer(session)) {
+                input = Input.getInputForPlayer(session);
+                if (maxBombs > bombPlantedCount()) {
+                    gameSession.addGameObject(new Bomb(this.x + 12, this.y + 12, gameSession, bombPower, this));
+                    gameSession.getCellFromGameArea(this.x, this.y)
+                            .addState(State.BOMB);
+                    bombStatus.offer(true);
+                    InputQueue.getInstance().remove(input);
+                }
+            }
         } else gameSession.removeGameObject(this);
     }
 
