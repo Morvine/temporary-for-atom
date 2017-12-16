@@ -32,7 +32,8 @@ public class Broker {
     }
 
     public void send(@NotNull String player, @NotNull Topic topic, @NotNull Object object) {
-        String message = "{\"topic\":\"REPLICA\",\"data\":{ \"objects\":[" + object + "], \"gameOver\":true}}";
+        //String message = "{\"topic\":\"REPLICA\",\"data\":{ \"objects\":[" + object + "], \"gameOver\":true}}";
+        String message = "{\"topic\":\"REPLICA\",\"data\":{ \"objects\":" + object + "}}";
         log.info(message);
         WebSocketSession session = connectionPool.getSession(player);
         connectionPool.send(session, message);
