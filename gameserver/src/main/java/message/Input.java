@@ -28,7 +28,7 @@ public class Input {
                 input = InputQueue.getInstance().iterator().next();*/
             Input[] queue = InputQueue.getInstance().toArray(new Input[InputQueue.getInstance().size()]);
             for (Input i : queue)
-                if ((i.getSession() == session)&&(i.getMessage().getTopic()==Topic.MOVE))
+                if ((i.getSession() == session) && (i.getMessage().getTopic() == Topic.MOVE))
                     return true;
         }
         return false;
@@ -41,7 +41,7 @@ public class Input {
                 input = InputQueue.getInstance().iterator().next();*/
             Input[] queue = InputQueue.getInstance().toArray(new Input[InputQueue.getInstance().size()]);
             for (Input i : queue)
-                if ((i.getSession() == session)&&(i.getMessage().getTopic()==Topic.PLANT_BOMB))
+                if ((i.getSession() == session) && (i.getMessage().getTopic() == Topic.PLANT_BOMB))
                     return true;
         }
         return false;

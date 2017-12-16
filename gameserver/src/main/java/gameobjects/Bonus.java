@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class Bonus extends Field implements Positionable, Tickable, Comparable{
+public class Bonus extends Field implements Positionable, Tickable, Comparable {
 
     private static final Logger log = LogManager.getLogger(Bonus.class);
     private final int id;
@@ -25,6 +25,7 @@ public class Bonus extends Field implements Positionable, Tickable, Comparable{
         log.info("Bombid = " + id + "; " + "Bomb place = (" + this.x + "," +
                 this.y + ")" + "; ");
     }
+
     @Override
     public void tick(long elapsed) {
         if (alive) {

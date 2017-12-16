@@ -73,7 +73,7 @@ public class Bomb extends Field implements Positionable, Tickable, Comparable {
                 if (gameSession.removeStateFromCell(x - 32 - i * 32, y, State.BOX)) break;
             } else break;
         }
-        gameSession.removeStateFromCell(x,y,bombType);
+        gameSession.removeStateFromCell(x, y, bombType);
         gameSession.addStateToCell(x, y, State.EXPLOSION);
         gameSession.addGameObject(new Explosion(x,
                 y, gameSession));

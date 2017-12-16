@@ -4,6 +4,7 @@ package ru.atom.bd;
 /**
  * Created by sergey on 3/25/17.
  */
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,5 +41,6 @@ class DbConnector {
     }
 
 
-    private DbConnector() { }
+    private DbConnector() {
+    }
 }

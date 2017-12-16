@@ -139,17 +139,22 @@ public class GameSession implements Tickable {
                     if ((y > 2) && (y < 10)) {
                         addGameObject(new Box(x * 32, y * 32, this));
                         gameArea[x][y].addState(State.BOX);
-                        if ((bonusChance > (int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)) {
+                        if ((bonusChance > (int) (Math.random() * 100))
+                                && !gameArea[x][y].getState().contains(State.BONUS)) {
                             addGameObject(new Bonus(x * 32, y * 32, this, 1));
                             gameArea[x][y].addState(State.BONUSSPEED);
                             gameArea[x][y].addState(State.BONUS);
                         }
-                        if ((bonusChance < (int) (Math.random() * 100)) && ((bonusChance * 2) > (int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)) {
+                        if ((bonusChance < (int) (Math.random() * 100))
+                                && ((bonusChance * 2) > (int) (Math.random() * 100))
+                                && !gameArea[x][y].getState().contains(State.BONUS)) {
                             addGameObject(new Bonus(x * 32, y * 32, this, 1));
                             gameArea[x][y].addState(State.BONUSFIRE);
                             gameArea[x][y].addState(State.BONUS);
                         }
-                        if (((bonusChance * 2) < (int) (Math.random() * 100)) && ((bonusChance * 3) > (int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)) {
+                        if (((bonusChance * 2) < (int) (Math.random() * 100))
+                                && ((bonusChance * 3) > (int) (Math.random() * 100))
+                                && !gameArea[x][y].getState().contains(State.BONUS)) {
                             addGameObject(new Bonus(x * 32, y * 32, this, 1));
                             gameArea[x][y].addState(State.BONUSBOMB);
                             gameArea[x][y].addState(State.BONUS);
@@ -161,17 +166,22 @@ public class GameSession implements Tickable {
                         addGameObject(new Box(x * 32, y * 32, this));
                         gameArea[x][y].addState(State.BOX);
 
-                        if ((bonusChance > (int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)) {
+                        if ((bonusChance > (int) (Math.random() * 100))
+                                && !gameArea[x][y].getState().contains(State.BONUS)) {
                             addGameObject(new Bonus(x * 32, y * 32, this, 1));
                             gameArea[x][y].addState(State.BONUSSPEED);
                             gameArea[x][y].addState(State.BONUS);
                         }
-                        if ((bonusChance < (int) (Math.random() * 100)) && ((bonusChance * 2) > (int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)) {
+                        if ((bonusChance < (int) (Math.random() * 100))
+                                && ((bonusChance * 2) > (int) (Math.random() * 100))
+                                && !gameArea[x][y].getState().contains(State.BONUS)) {
                             addGameObject(new Bonus(x * 32, y * 32, this, 1));
                             gameArea[x][y].addState(State.BONUSFIRE);
                             gameArea[x][y].addState(State.BONUS);
                         }
-                        if (((bonusChance * 2) < (int) (Math.random() * 100)) && ((bonusChance * 3) > (int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)) {
+                        if (((bonusChance * 2) < (int) (Math.random() * 100))
+                                && ((bonusChance * 3) > (int) (Math.random() * 100))
+                                && !gameArea[x][y].getState().contains(State.BONUS)) {
                             addGameObject(new Bonus(x * 32, y * 32, this, 1));
                             gameArea[x][y].addState(State.BONUSBOMB);
                             gameArea[x][y].addState(State.BONUS);
@@ -183,17 +193,22 @@ public class GameSession implements Tickable {
                         addGameObject(new Box(x * 32, y * 32, this));
                         gameArea[x][y].addState(State.BOX);
 
-                        if ((bonusChance > (int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)) {
+                        if ((bonusChance > (int) (Math.random() * 100))
+                                && !gameArea[x][y].getState().contains(State.BONUS)) {
                             addGameObject(new Bonus(x * 32, y * 32, this, 1));
                             gameArea[x][y].addState(State.BONUSSPEED);
                             gameArea[x][y].addState(State.BONUS);
                         }
-                        if ((bonusChance < (int) (Math.random() * 100)) && ((bonusChance * 2) > (int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)) {
+                        if ((bonusChance < (int) (Math.random() * 100))
+                                && ((bonusChance * 2) > (int) (Math.random() * 100))
+                                && !gameArea[x][y].getState().contains(State.BONUS)) {
                             addGameObject(new Bonus(x * 32, y * 32, this, 1));
                             gameArea[x][y].addState(State.BONUSFIRE);
                             gameArea[x][y].addState(State.BONUS);
                         }
-                        if (((bonusChance * 2) < (int) (Math.random() * 100)) && ((bonusChance * 3) > (int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)) {
+                        if (((bonusChance * 2) < (int) (Math.random() * 100))
+                                && ((bonusChance * 3) > (int) (Math.random() * 100))
+                                && !gameArea[x][y].getState().contains(State.BONUS)) {
                             addGameObject(new Bonus(x * 32, y * 32, this, 1));
                             gameArea[x][y].addState(State.BONUSBOMB);
                             gameArea[x][y].addState(State.BONUS);
@@ -204,17 +219,22 @@ public class GameSession implements Tickable {
                         addGameObject(new Box(x * 32, y * 32, this));
                         gameArea[x][y].addState(State.BOX);
 
-                        if ((bonusChance > (int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)) {
+                        if ((bonusChance > (int) (Math.random() * 100))
+                                && !gameArea[x][y].getState().contains(State.BONUS)) {
                             addGameObject(new Bonus(x * 32, y * 32, this, 1));
                             gameArea[x][y].addState(State.BONUSSPEED);
                             gameArea[x][y].addState(State.BONUS);
                         }
-                        if ((bonusChance < (int) (Math.random() * 100)) && ((bonusChance * 2) > (int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)) {
+                        if ((bonusChance < (int) (Math.random() * 100))
+                                && ((bonusChance * 2) > (int) (Math.random() * 100))
+                                && !gameArea[x][y].getState().contains(State.BONUS)) {
                             addGameObject(new Bonus(x * 32, y * 32, this, 1));
                             gameArea[x][y].addState(State.BONUSFIRE);
                             gameArea[x][y].addState(State.BONUS);
                         }
-                        if (((bonusChance * 2) < (int) (Math.random() * 100)) && ((bonusChance * 3) > (int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)) {
+                        if (((bonusChance * 2) < (int) (Math.random() * 100))
+                                && ((bonusChance * 3) > (int) (Math.random() * 100))
+                                && !gameArea[x][y].getState().contains(State.BONUS)) {
                             addGameObject(new Bonus(x * 32, y * 32, this, 1));
                             gameArea[x][y].addState(State.BONUSBOMB);
                             gameArea[x][y].addState(State.BONUS);
@@ -227,8 +247,8 @@ public class GameSession implements Tickable {
         }
         ConcurrentLinkedQueue<WebSocketSession> playerQueue = ConnectionPool.getInstance()
                 .getSessionsWithGameId((int) id);
-            addGameObject(new BomberGirl(32, 32, playerQueue.poll(), this, State.BOMB1));
-            gameArea[1][1].addState(State.BOMBERGIRL);
+        addGameObject(new BomberGirl(32, 32, playerQueue.poll(), this, State.BOMB1));
+        gameArea[1][1].addState(State.BOMBERGIRL);
 
         if (playerCount > 1) {
             addGameObject(new BomberGirl(480, 352, playerQueue.poll(), this, State.BOMB2));
@@ -249,15 +269,15 @@ public class GameSession implements Tickable {
     }
 
     public Cell getCellFromGameArea(int x, int y) {
-        return gameArea[x/32][y/32];
+        return gameArea[x / 32][y / 32];
     }
 
     public void addStateToCell(int x, int y, State state) {
-        gameArea[x/32][y/32].addState(state);
+        gameArea[x / 32][y / 32].addState(state);
     }
 
     public boolean removeStateFromCell(int x, int y, State state) {
-        return (gameArea[x/32][y/32].getState().remove(state));
+        return (gameArea[x / 32][y / 32].getState().remove(state));
     }
 
     public int getId() {
@@ -336,8 +356,8 @@ public class GameSession implements Tickable {
         return result;
     }
 
-    public boolean getGameOver (){
-        if(inGameBomberGirls.size() <= 1)
+    public boolean getGameOver() {
+        if (inGameBomberGirls.size() <= 1)
             return true;
         else
             return false;
@@ -347,10 +367,6 @@ public class GameSession implements Tickable {
     @Override
     public void tick(long elapsed) {
         log.info("tick");
-        /*for (GameObject gameObject : gameObjects) {
-            if (gameObject instanceof Tickable) {
-                ((Tickable) gameObject).tick(elapsed);
-            }
-        }*/
+
     }
 }

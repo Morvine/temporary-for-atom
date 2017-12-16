@@ -15,7 +15,7 @@ public interface Dao<T> {
     /**
      * SELECT * ... WHERE cond0 AND ... AND condN
      */
-    List<T> getAllWhere(String ... conditions);
+    List<T> getAllWhere(String... conditions);
 
     /**
      * INSERT INTO ...
@@ -24,6 +24,7 @@ public interface Dao<T> {
 
     /**
      * SELECT * from ... WHERE id=
+     *
      * @return Optional.empty() if nothing found
      */
     default Optional<T> findById(int id) {

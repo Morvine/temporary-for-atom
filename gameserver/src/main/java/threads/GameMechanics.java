@@ -12,8 +12,8 @@ import java.util.concurrent.locks.LockSupport;
 
 import boxes.GameStarterQueue;
 
-import gameobjects.*;
-import org.springframework.web.socket.WebSocketSession;
+import gameobjects.GameSession;
+
 
 
 public class GameMechanics implements Runnable {
@@ -32,7 +32,7 @@ public class GameMechanics implements Runnable {
         while (!GameStarterQueue.getInstance().contains((int) id)) {
             LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(100));
         }
-        while (ConnectionPool.getInstance().getPlayersWithGameId((int) id).size()<playerCount) {
+        while (ConnectionPool.getInstance().getPlayersWithGameId((int) id).size() < playerCount) {
             LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(100));
         }
         GameStarterQueue.getInstance().poll();

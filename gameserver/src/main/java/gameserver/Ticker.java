@@ -54,7 +54,7 @@ public class Ticker {
         for (int i=0; i<tickers.length;i++)
             tickers[i].tick(elapsed);*/
 
-                tickables.forEach(tickable -> tickable.tick(elapsed));
+        tickables.forEach(tickable -> tickable.tick(elapsed));
     }
 
     public long getTickNumber() {

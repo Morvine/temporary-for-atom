@@ -31,11 +31,11 @@ public class GameServer implements Runnable {
                     LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(100));
                 }
                 playerCount = GameCreatorQueue.getInstance().poll();
-                GameMechanics GameMechanics = new GameMechanics(playerCount);
-                Thread game = new Thread(GameMechanics);
+                GameMechanics gameMechanics = new GameMechanics(playerCount);
+                Thread game = new Thread(gameMechanics);
                 game.start();
-                log.info("GameMechanics with id: " + GameMechanics.getId() + " was created");
-                sendGameId(GameMechanics.getId());
+                log.info("GameMechanics with id: " + gameMechanics.getId() + " was created");
+                sendGameId(gameMechanics.getId());
             } catch (Exception e) {
                 log.info("No response");
             }

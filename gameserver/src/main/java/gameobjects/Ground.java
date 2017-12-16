@@ -15,7 +15,7 @@ public class Ground extends Field implements Positionable {
         log.info("New ground with id {}", id);
     }
 
-    private final static Logger log = LogManager.getLogger(Ground.class);
+    private final Logger log = LogManager.getLogger(Ground.class);
 
     public String toJson() {
         Point pos = getPosition();

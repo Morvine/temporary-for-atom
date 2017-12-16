@@ -22,7 +22,7 @@ public class MatchMaker implements Runnable {
         UserDao userDao = new UserDao();
         List<GameSession> candidates = new ArrayList<>(GameSession.PLAYERS_IN_GAME);
         MatchMakerMonitoring monitor = new MatchMakerMonitoring();
-        JsonWork jsonWork = new JsonWork();
+
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 candidates.add(
@@ -60,7 +60,7 @@ public class MatchMaker implements Runnable {
 
             if (candidates.size() == GameSession.PLAYERS_IN_GAME) {
                 try {
-                   Gamesession newUser = new Gamesession(GameIdQueue.getInstance().peek().getGameId(),
+                    Gamesession newUser = new Gamesession(GameIdQueue.getInstance().peek().getGameId(),
                             candidates.get(0).toString(), candidates.get(1).toString());
                     userDao.insert(newUser);
 

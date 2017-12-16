@@ -5,8 +5,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -67,22 +65,20 @@ public class UserDao implements Dao<Gamesession> {
         try (Connection con = DbConnector.getConnection();
              Statement stm = con.createStatement()
         ) {
-            stm.execute(String.format("insert into players values ('"+gamesession.getId()+"','"
-                    +gamesession.getFirstname()+"','"+gamesession.getSecondname()+"');"));
+            stm.execute(String.format("insert into players values ('" + gamesession.getId() + "','"
+                    + gamesession.getFirstname() + "','" + gamesession.getSecondname() + "');"));
             System.out.println("smth");
         } catch (SQLException e) {
-
+            log.error("Failed to getAll where.", e);
+    
         }
     }
 
 
-    //public User getByName(String name) {
-      //  throw new UnsupportedOperationException();
-   // }
+
 
     private static Gamesession mapToUser(ResultSet rs) throws SQLException {
-        return new Gamesession(rs.getInt("id"),rs.getString("firstname"),rs.getString("secondname"));
-
+        return new Gamesession(rs.getInt("id"), rs.getString("firstname"), rs.getString("secondname"));
 
 
     }

@@ -12,35 +12,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 
-
-public class DBMethods {
+public class DbMethods {
 
     private static final UserDao userDao = new UserDao();
 
-    private static final Logger log = LogManager.getLogger(DBMethods.class);
+    private static final Logger log = LogManager.getLogger(DbMethods.class);
 
-        @RequestMapping(
-                path = "firstname",
-                method = RequestMethod.POST,
-                consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-        @ResponseStatus(HttpStatus.OK)
-        public static ResponseEntity<String> players (@RequestParam("id") long id, @RequestParam("firstname") String name1,@RequestParam("secondname") String name2){
-
-
-
-           // List<Gamesession> fisrtplayers = userDao.getAllWhere("players.firstname = '" + name1 + "'");
-
-            Gamesession newgamesession = new Gamesession(id, name1, name2);
-
-            userDao.insert(newgamesession);
-            log.info("[" + name1 + "] come");
-            log.info("[" + name2 + "] come");
-            log.info("[" + id + "] is");
+    @RequestMapping(
+            path = "firstname",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public static ResponseEntity<String> players(@RequestParam("id") long id, @RequestParam("firstname") String name1,
+                                                 @RequestParam("secondname") String name2) {
 
 
 
-            return ResponseEntity.ok().build();
-        }
+
+        Gamesession newgamesession = new Gamesession(id, name1, name2);
+
+        userDao.insert(newgamesession);
+        log.info("[" + name1 + "] come");
+        log.info("[" + name2 + "] come");
+        log.info("[" + id + "] is");
+
+
+        return ResponseEntity.ok().build();
+    }
 
 
 }

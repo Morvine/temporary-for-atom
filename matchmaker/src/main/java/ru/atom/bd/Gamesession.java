@@ -21,6 +21,7 @@ public class Gamesession {
     public String getFirstname() {
         return firstname;
     }
+
     public String getSecondname() {
         return secondname;
     }
@@ -29,17 +30,17 @@ public class Gamesession {
         this.firstname = firstname;
         return this;
     }
+
     public Gamesession setSecondname(String secondname) {
         this.secondname = secondname;
         return this;
     }
-    public Gamesession (long id, String firstname, String secondname)
-    {
+
+    public Gamesession(long id, String firstname, String secondname) {
         this.id = id;
-        this.firstname= firstname;
+        this.firstname = firstname;
         this.secondname = secondname;
     }
-
 
 
 }
