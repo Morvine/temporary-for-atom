@@ -249,15 +249,15 @@ public class GameSession implements Tickable {
     }
 
     public Cell getCellFromGameArea(int x, int y) {
-        return gameArea[x / 32][y / 32];
+        return gameArea[x/32][y/32];
     }
 
     public void addStateToCell(int x, int y, State state) {
-        gameArea[x / 32][y / 32].addState(state);
+        gameArea[x/32][y/32].addState(state);
     }
 
     public boolean removeStateFromCell(int x, int y, State state) {
-        return (gameArea[x / 32][y / 32].getState().remove(state));
+        return (gameArea[x/32][y/32].getState().remove(state));
     }
 
     public int getId() {
@@ -275,46 +275,35 @@ public class GameSession implements Tickable {
     }
 
     public String jsonStringBonus() {
-        if (inGameBonus.size() == 0) {
-            return null;
-        } else {
-            String objjson = "";
-            for (Integer i : inGameBonus.keySet()) {
-                Bonus obj = inGameBonus.get(i);
-                objjson = objjson + obj.toJson() + ",";
-            }
-            String result = objjson.substring(0, (objjson.length() - 1));
-            return result;
+        String objjson = "";
+        for (Integer i : inGameBonus.keySet()) {
+            Bonus obj = inGameBonus.get(i);
+            objjson = objjson + obj.toJson() + ",";
         }
+        String result = objjson.substring(0, objjson.length());
+        return result;
+
     }
 
 
     public String jsonStringExplosions() {
-        if (inGameExplosions.size() == 0) {
-            return null;
-        } else {
-            String objjson = "";
-            for (Integer i : inGameExplosions.keySet()) {
-                Explosion obj = inGameExplosions.get(i);
-                objjson = objjson + obj.toJson() + ",";
-            }
-            String result = objjson.substring(0, (objjson.length() - 1));
-            return result;
+        String objjson = "";
+        for (Integer i : inGameExplosions.keySet()) {
+            Explosion obj = inGameExplosions.get(i);
+            objjson = objjson + obj.toJson() + ",";
         }
+        String result = objjson.substring(0, objjson.length());
+        return result;
     }
 
     public String jsonStringBombs() {
-        if (inGameBombs.size() == 0) {
-            return null;
-        } else {
-            String objjson = "";
-            for (Integer i : inGameBombs.keySet()) {
-                Bomb obj = inGameBombs.get(i);
-                objjson = objjson + obj.toJson() + ",";
-            }
-            String result = objjson.substring(0, (objjson.length() - 1));
-            return result;
+        String objjson = "";
+        for (Integer i : inGameBombs.keySet()) {
+            Bomb obj = inGameBombs.get(i);
+            objjson = objjson + obj.toJson() + ",";
         }
+        String result = objjson.substring(0, objjson.length());
+        return result;
     }
 
     public String jsonStringBoxes() {
@@ -323,7 +312,7 @@ public class GameSession implements Tickable {
             Box obj = inGameBoxes.get(p);
             objjson = objjson + obj.toJson() + ",";
         }
-        String result = objjson.substring(0, (objjson.length() - 1));
+        String result = objjson.substring(0, objjson.length());
         return result;
     }
 
@@ -333,7 +322,7 @@ public class GameSession implements Tickable {
             Wall obj = inGameWalls.get(p);
             objjson = objjson + obj.toJson() + ",";
         }
-        String result = objjson.substring(0, (objjson.length() - 1));
+        String result = objjson.substring(0, objjson.length());
         return result;
     }
 
@@ -345,6 +334,13 @@ public class GameSession implements Tickable {
         }
         String result = objjson.substring(0, (objjson.length() - 1));
         return result;
+    }
+
+    public boolean getGameOver (){
+        if(inGameBomberGirls.size() <= 1)
+            return true;
+        else
+            return false;
     }
 
 
