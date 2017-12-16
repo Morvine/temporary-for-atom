@@ -12,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.socket.WebSocketSession;
 import util.JsonHelper;
-
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
@@ -65,7 +64,7 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
             if (gameSession.getCellFromGameArea(x + 12, y + 12).getState().contains(State.BONUSSPEED)) {
                 gameSession.removeStateFromCell(x + 12, y + 12, State.BONUS);
                 gameSession.removeStateFromCell(x + 12, y + 12, State.BONUSSPEED);
-                this.speedModifier++;
+                this.speedModifier += 0.3;
             }
             Input input;
             //log.info("producing action");
@@ -92,11 +91,20 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
         int shift = (int) (time * velocity * speedModifier);
         if (direction == Movable.Direction.UP) {
             if (!isCellSolid(x, y + 23 + shift) && !isCellSolid(x + 23, y + 23 + shift)) {
-                y = y + (int) (velocity * time);
-            } else if (!isCellSolid(x + 26, y + 23 + shift)) {
+                y = y + shift;
+            } else {
+                for (int step = shift - 1; step > 0; step--)
+                    if (!isCellSolid(x, y + 23 + step) && !isCellSolid(x + 23, y + 23 + step)) {
+                        y = y + step;
+                        step = 0;
+                    }
+            }
+            if ((isCellSolid(x, y + 24) || isCellSolid(x + 23, y + 24))
+                    && !isCellSolid(x + 26, y + 24)) {
                 if (!isCellSolid(x + 23 + shift, y) && !isCellSolid(x + 23 + shift, y + 23))
                     x = x + shift;
-            } else if (!isCellSolid(x - 2, y + 23 + shift)) {
+            } else if ((isCellSolid(x, y + 24) || isCellSolid(x + 23, y + 24))
+                    && !isCellSolid(x - 2, y + 24)) {
                 if (!isCellSolid(x - shift, y) && !isCellSolid(x - shift, y + 23))
                     x = x - shift;
             }
@@ -105,10 +113,19 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
         if (direction == Movable.Direction.DOWN) {
             if (!isCellSolid(x, y - shift) && !isCellSolid(x + 23, y - shift)) {
                 y = y - shift;
-            } else if (!isCellSolid(x + 26, y - shift)) {
+            } else {
+                for (int step = shift - 1; step > 0; step--)
+                    if (!isCellSolid(x, y - step) && !isCellSolid(x + 23, y - step)) {
+                        y = y - step;
+                        step = 0;
+                    }
+            }
+            if ((isCellSolid(x, y - 1) || isCellSolid(x + 23, y - 1))
+                    && !isCellSolid(x + 26, y - 1)) {
                 if (!isCellSolid(x + 23 + shift, y) && !isCellSolid(x + 23 + shift, y + 23))
                     x = x + shift;
-            } else if (!isCellSolid(x - 2, y - shift)) {
+            } else if ((isCellSolid(x, y - 1) || isCellSolid(x + 23, y - 1))
+                    && !isCellSolid(x - 2, y - 1)) {
                 if (!isCellSolid(x - shift, y) && !isCellSolid(x - shift, y + 23))
                     x = x - shift;
             }
@@ -116,10 +133,19 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
         if (direction == Movable.Direction.LEFT) {
             if (!isCellSolid(x - shift, y) && !isCellSolid(x - shift, y + 23)) {
                 x = x - shift;
-            } else if (!isCellSolid(x - shift, y + 26)) {
+            } else {
+                for (int step = shift - 1; step > 0; step--)
+                    if (!isCellSolid(x - step, y) && !isCellSolid(x - step, y + 23)) {
+                        x = x - step;
+                        step = 0;
+                    }
+            }
+            if ((isCellSolid(x - 1, y) || isCellSolid(x - 1, y + 23))
+                    && !isCellSolid(x - 1, y + 26)) {
                 if (!isCellSolid(x, y + 23 + shift) && !isCellSolid(x + 23, y + 23 + shift))
                     y = y + shift;
-            } else if (!isCellSolid(x - shift, y - 2)) {
+            } else if ((isCellSolid(x - 1, y) || isCellSolid(x - 1, y + 23))
+                    && !isCellSolid(x - 1, y - 2)) {
                 if (!isCellSolid(x, y - shift) && !isCellSolid(x + 23, y - shift))
                     y = y - shift;
             }
@@ -127,10 +153,19 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
         if (direction == Movable.Direction.RIGHT) {
             if (!isCellSolid(x + 23 + shift, y) && !isCellSolid(x + 23 + shift, y + 23)) {
                 x = x + shift;
-            } else if (!isCellSolid(x + 23 + shift, y + 26)) {
+            } else {
+                for (int step = shift - 1; step > 0; step--)
+                    if (!isCellSolid(x + 23 + step, y) && !isCellSolid(x + 23 + step, y + 23)) {
+                        x = x + step;
+                        step = 0;
+                    }
+            }
+            if ((isCellSolid(x + 24, y) || isCellSolid(x + 24, y + 23))
+                    && !isCellSolid(x + 24, y + 26)) {
                 if (!isCellSolid(x, y + 23 + shift) && !isCellSolid(x + 23, y + 23 + shift))
                     y = y + shift;
-            } else if (!isCellSolid(x + 23 + shift, y - 2)) {
+            } else if ((isCellSolid(x + 24, y) || isCellSolid(x + 24, y + 23))
+                    && !isCellSolid(x + 24, y - 2)) {
                 if (!isCellSolid(x, y - shift) && !isCellSolid(x + 23, y - shift))
                     y = y - shift;
             }

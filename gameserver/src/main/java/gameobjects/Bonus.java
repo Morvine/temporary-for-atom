@@ -39,8 +39,17 @@ public class Bonus extends Field implements Positionable, Tickable, Comparable{
     }
 
     public String toJson() {
-        String json = "{\"type\":\"BFire\",\"id\":" +
-                this.getId() + ",\"position\":{\"x\":" + this.x + ",\"y\":" + this.y + "}}";
+        String json;
+        if (this.gameSession.getCellFromGameArea(x, y).getState().contains(State.BONUSSPEED)) {
+            json = "{\"type\":\"Speed\",\"id\":" +
+                    this.getId() + ",\"position\":{\"x\":" + this.x + ",\"y\":" + this.y + "}}";
+        } else if (this.gameSession.getCellFromGameArea(x, y).getState().contains(State.BONUSFIRE)) {
+            json = "{\"type\":\"BFire\",\"id\":" +
+                    this.getId() + ",\"position\":{\"x\":" + this.x + ",\"y\":" + this.y + "}}";
+        } else {
+            json = "{\"type\":\"BBomb\",\"id\":" +
+                    this.getId() + ",\"position\":{\"x\":" + this.x + ",\"y\":" + this.y + "}}";
+        }
         return json;
     }
 
