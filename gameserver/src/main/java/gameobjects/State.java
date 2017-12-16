@@ -1,7 +1,10 @@
 package gameobjects;
 
 public enum State {
-    BOMB,
+    BOMB1,
+    BOMB2,
+    BOMB3,
+    BOMB4,
     BOX,
     EXPLOSION,
     GROUND,

@@ -227,19 +227,19 @@ public class GameSession implements Tickable {
         }
         ConcurrentLinkedQueue<WebSocketSession> playerQueue = ConnectionPool.getInstance()
                 .getSessionsWithGameId((int) id);
-            addGameObject(new BomberGirl(32, 32, playerQueue.poll(), this));
+            addGameObject(new BomberGirl(32, 32, playerQueue.poll(), this, State.BOMB1));
             gameArea[1][1].addState(State.BOMBERGIRL);
 
         if (playerCount > 1) {
-            addGameObject(new BomberGirl(480, 352, playerQueue.poll(), this));
+            addGameObject(new BomberGirl(480, 352, playerQueue.poll(), this, State.BOMB2));
             gameArea[15][11].addState(State.BOMBERGIRL);
         }
         if (playerCount > 2) {
-            addGameObject(new BomberGirl(480, 32, playerQueue.poll(), this));
+            addGameObject(new BomberGirl(480, 32, playerQueue.poll(), this, State.BOMB3));
             gameArea[15][1].addState(State.BOMBERGIRL);
         }
         if (playerCount > 3) {
-            addGameObject(new BomberGirl(32, 352, playerQueue.poll(), this));
+            addGameObject(new BomberGirl(32, 352, playerQueue.poll(), this, State.BOMB4));
             gameArea[1][11].addState(State.BOMBERGIRL);
         }
     }

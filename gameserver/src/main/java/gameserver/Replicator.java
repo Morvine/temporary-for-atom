@@ -18,8 +18,7 @@ public class Replicator {
 
 
         String[] playerList = null;
-        ConcurrentLinkedQueue<String> connectionPool = new ConcurrentLinkedQueue<String>();
-        connectionPool = ConnectionPool.getInstance().getPlayersWithGameId((int) gameSession.getId());
+        ConcurrentLinkedQueue<String> connectionPool = ConnectionPool.getInstance().getPlayersWithGameId((int) gameSession.getId());
         /*for (int i = 0; i < ConnectionPool.getInstance().getPlayersWithGameId(gameSession.getId()).size(); i++)*/
         //String player = playerList[i];
         while (!connectionPool.isEmpty()) {

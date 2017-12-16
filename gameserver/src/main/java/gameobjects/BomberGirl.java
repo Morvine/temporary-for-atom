@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.socket.WebSocketSession;
 import util.JsonHelper;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
@@ -25,17 +26,19 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     private int maxBombs;
     private int bombPower;
     private double speedModifier = 1.0;
+    private State bombType;
     private WebSocketSession session;
     private GameSession gameSession;
     private ConcurrentLinkedQueue<Boolean> bombStatus = new ConcurrentLinkedQueue<>();
 
-    public BomberGirl(int x, int y, WebSocketSession session, GameSession gameSession) {
+    public BomberGirl(int x, int y, WebSocketSession session, GameSession gameSession, State bombType) {
         super(x, y);
         this.x = x;
         this.y = y;
         this.id = getId();
         this.session = session;
         this.gameSession = gameSession;
+        this.bombType = bombType;
         this.velocity = 0.2;
         this.bombPower = 1;
         this.maxBombs = 1;
@@ -77,9 +80,9 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
             if (Input.hasBombInputForPlayer(session)) {
                 input = Input.getInputForPlayer(session);
                 if (maxBombs > bombPlantedCount()) {
-                    gameSession.addGameObject(new Bomb(this.x + 12, this.y + 12, gameSession, bombPower, this));
+                    gameSession.addGameObject(new Bomb(this.x + 12, this.y + 12, gameSession, bombPower, this, bombType));
                     gameSession.getCellFromGameArea(this.x, this.y)
-                            .addState(State.BOMB);
+                            .addState(bombType);
                     bombStatus.offer(true);
                     InputQueue.getInstance().remove(input);
                 }
@@ -188,12 +191,63 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     }
 
     public boolean isCellSolid(int x, int y) {
-        return (this.gameSession.getCellFromGameArea(x,
-                y).getState().contains(State.WALL)) || (this.gameSession.getCellFromGameArea(x, y)
-                .getState().contains(State.BOX))
-                /*|| (this.gameSession.getCellFromGameArea(coordX,
-                    coordY)
-                    .getState().contains(State.BOMB))*/;
+        boolean result = false;
+        switch (bombType) {
+            case BOMB1: {
+                result = (gameSession.getCellFromGameArea(x,
+                        y).getState().contains(State.WALL)) || (gameSession.getCellFromGameArea(x, y)
+                        .getState().contains(State.BOX))
+                        || (gameSession.getCellFromGameArea(x,
+                        y)
+                        .getState().contains(State.BOMB2)) || (gameSession.getCellFromGameArea(x,
+                        y)
+                        .getState().contains(State.BOMB3)) || (gameSession.getCellFromGameArea(x,
+                        y)
+                        .getState().contains(State.BOMB4));
+                break;
+            }
+            case BOMB2: {
+                result = (gameSession.getCellFromGameArea(x,
+                        y).getState().contains(State.WALL)) || (gameSession.getCellFromGameArea(x, y)
+                        .getState().contains(State.BOX))
+                        || (gameSession.getCellFromGameArea(x,
+                        y)
+                        .getState().contains(State.BOMB1)) || (gameSession.getCellFromGameArea(x,
+                        y)
+                        .getState().contains(State.BOMB3)) || (gameSession.getCellFromGameArea(x,
+                        y)
+                        .getState().contains(State.BOMB4));
+                break;
+            }
+            case BOMB3: {
+                result = (gameSession.getCellFromGameArea(x,
+                        y).getState().contains(State.WALL)) || (gameSession.getCellFromGameArea(x, y)
+                        .getState().contains(State.BOX))
+                        || (gameSession.getCellFromGameArea(x,
+                        y)
+                        .getState().contains(State.BOMB2)) || (gameSession.getCellFromGameArea(x,
+                        y)
+                        .getState().contains(State.BOMB1)) || (gameSession.getCellFromGameArea(x,
+                        y)
+                        .getState().contains(State.BOMB4));
+                break;
+            }
+            case BOMB4: {
+                result = (gameSession.getCellFromGameArea(x,
+                        y).getState().contains(State.WALL)) || (gameSession.getCellFromGameArea(x, y)
+                        .getState().contains(State.BOX))
+                        || (gameSession.getCellFromGameArea(x,
+                        y)
+                        .getState().contains(State.BOMB2)) || (gameSession.getCellFromGameArea(x,
+                        y)
+                        .getState().contains(State.BOMB3)) || (gameSession.getCellFromGameArea(x,
+                        y)
+                        .getState().contains(State.BOMB4));
+                break;
+            }
+            default: break;
+        }
+        return result;
     }
 
     @Override
