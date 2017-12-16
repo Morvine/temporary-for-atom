@@ -18,8 +18,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     private static final Logger log = LogManager.getLogger(BomberGirl.class);
-    private int x;
-    private int y;
+    private float x;
+    private float y;
     private int id;
     private double velocity;
     private boolean alive = true;
@@ -30,8 +30,8 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     private GameSession gameSession;
     private ConcurrentLinkedQueue<Boolean> bombStatus = new ConcurrentLinkedQueue<>();
 
-    public BomberGirl(int x, int y, WebSocketSession session, GameSession gameSession) {
-        super(x, y);
+    public BomberGirl(float x, float y, WebSocketSession session, GameSession gameSession) {
+        super((int)x,(int) y);
         this.x = x;
         this.y = y;
         this.id = getId();
@@ -46,25 +46,25 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
 
     public void tick(long elapsed) {
         //log.info("tick");
-        if (gameSession.getCellFromGameArea(this.x + 12, this.y + 12)
+        if (gameSession.getCellFromGameArea((int)this.x + 12, (int)this.y + 12)
                 .getState().contains(State.EXPLOSION)) {
             //alive = false;
         }
         if (alive) {
-            if (gameSession.getCellFromGameArea(x + 12, y + 12).getState().contains(State.BONUSBOMB)) {
-                gameSession.removeStateFromCell(x + 12, y + 12, State.BONUS);
-                gameSession.removeStateFromCell(x + 12, y + 12, State.BONUSBOMB);
+            if (gameSession.getCellFromGameArea((int)x + 12, (int)y + 12).getState().contains(State.BONUSBOMB)) {
+                gameSession.removeStateFromCell((int)x + 12, (int)y + 12, State.BONUS);
+                gameSession.removeStateFromCell((int)x + 12, (int)y + 12, State.BONUSBOMB);
                 this.maxBombs++;
             }
-            if (gameSession.getCellFromGameArea(x + 12, y + 12).getState().contains(State.BONUSFIRE)) {
-                gameSession.removeStateFromCell(x + 12, y + 12, State.BONUS);
-                gameSession.removeStateFromCell(x + 12, y + 12, State.BONUSFIRE);
+            if (gameSession.getCellFromGameArea((int)x + 12, (int)y + 12).getState().contains(State.BONUSFIRE)) {
+                gameSession.removeStateFromCell((int)x + 12, (int)y + 12, State.BONUS);
+                gameSession.removeStateFromCell((int)x + 12, (int)y + 12, State.BONUSFIRE);
                 this.bombPower++;
                 log.info("Stop");
             }
-            if (gameSession.getCellFromGameArea(x + 12, y + 12).getState().contains(State.BONUSSPEED)) {
-                gameSession.removeStateFromCell(x + 12, y + 12, State.BONUS);
-                gameSession.removeStateFromCell(x + 12, y + 12, State.BONUSSPEED);
+            if (gameSession.getCellFromGameArea((int)x + 12, (int)y + 12).getState().contains(State.BONUSSPEED)) {
+                gameSession.removeStateFromCell((int)x + 12, (int)y + 12, State.BONUS);
+                gameSession.removeStateFromCell((int)x + 12, (int)y + 12, State.BONUSSPEED);
                 this.speedModifier++;
             }
             Input input;
@@ -78,8 +78,8 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
             if (Input.hasBombInputForPlayer(session)) {
                 input = Input.getInputForPlayer(session);
                 if (maxBombs > bombPlantedCount()) {
-                    gameSession.addGameObject(new Bomb(this.x + 12, this.y + 12, gameSession, bombPower, this));
-                    gameSession.getCellFromGameArea(this.x, this.y)
+                    gameSession.addGameObject(new Bomb((int)this.x + 12, (int)this.y + 12, gameSession, bombPower, this));
+                    gameSession.getCellFromGameArea((int)this.x, (int)this.y)
                             .addState(State.BOMB);
                     bombStatus.offer(true);
                     InputQueue.getInstance().remove(input);
@@ -91,51 +91,51 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
     public Point move(Movable.Direction direction, long time) {
         int shift = (int) (time * velocity * speedModifier);
         if (direction == Movable.Direction.UP) {
-            if (!isCellSolid(x, y + 23 + shift) && !isCellSolid(x + 23, y + 23 + shift)) {
+            if (!isCellSolid((int)x, (int)y + 23 + shift) && !isCellSolid((int)x + 23, (int)y + 23 + shift)) {
                 y = y + shift;
-            } else if (!isCellSolid(x + 26, y + 23 + shift)) {
-                if (!isCellSolid(x + 23 + shift, y) && !isCellSolid(x + 23 + shift, y + 23))
+            } else if (!isCellSolid((int)x + 26, (int)y + 23 + shift)) {
+                if (!isCellSolid((int)x + 23 + shift, (int)y) && !isCellSolid((int)x + 23 + shift, (int)y + 23))
                     x = x + shift;
-            } else if (!isCellSolid(x - 2, y + 23 + shift)) {
-                if (!isCellSolid(x - shift, y) && !isCellSolid(x - shift, y + 23))
+            } else if (!isCellSolid((int)x - 2, (int)y + 23 + shift)) {
+                if (!isCellSolid((int)x - shift, (int)y) && !isCellSolid((int)x - shift, (int)y + 23))
                     x = x - shift;
             }
             //log.info(this.y);
         }
         if (direction == Movable.Direction.DOWN) {
-            if (!isCellSolid(x, y - shift) && !isCellSolid(x + 23, y - shift)) {
+            if (!isCellSolid((int)x, (int)y - shift) && !isCellSolid((int)x + 23, (int)y - shift)) {
                 y = y - shift;
-            } else if (!isCellSolid(x + 26, y - shift)) {
-                if (!isCellSolid(x + 23 + shift, y) && !isCellSolid(x + 23 + shift, y + 23))
+            } else if (!isCellSolid((int)x + 26, (int)y - shift)) {
+                if (!isCellSolid((int)x + 23 + shift, (int)y) && !isCellSolid((int)x + 23 + shift, (int)y + 23))
                     x = x + shift;
-            } else if (!isCellSolid(x - 2, y - shift)) {
-                if (!isCellSolid(x - shift, y) && !isCellSolid(x - shift, y + 23))
+            } else if (!isCellSolid((int)x - 2, (int)y - shift)) {
+                if (!isCellSolid((int)x - shift, (int)y) && !isCellSolid((int)x - shift, (int)y + 23))
                     x = x - shift;
             }
         }
         if (direction == Movable.Direction.LEFT) {
-            if (!isCellSolid(x - shift, y) && !isCellSolid(x - shift, y + 23)) {
+            if (!isCellSolid((int)x - shift, (int)y) && !isCellSolid((int)x - shift, (int)y + 23)) {
                 x = x - shift;
-            } else if (!isCellSolid(x - shift, y + 26)) {
-                if (!isCellSolid(x, y + 23 + shift) && !isCellSolid(x + 23, y + 23 + shift))
+            } else if (!isCellSolid((int)x - shift, (int)y + 26)) {
+                if (!isCellSolid((int)x, (int)y + 23 + shift) && !isCellSolid((int)x + 23, (int)y + 23 + shift))
                     y = y + shift;
-            } else if (!isCellSolid(x - shift, y - 2)) {
-                if (!isCellSolid(x, y - shift) && !isCellSolid(x + 23, y - shift))
+            } else if (!isCellSolid((int)x - shift, (int)y - 2)) {
+                if (!isCellSolid((int)x, (int)y - shift) && !isCellSolid((int)x + 23, (int)y - shift))
                     y = y - shift;
             }
         }
         if (direction == Movable.Direction.RIGHT) {
-            if (!isCellSolid(x + 23 + shift, y) && !isCellSolid(x + 23 + shift, y + 23)) {
+            if (!isCellSolid((int)x + 23 + shift, (int)y) && !isCellSolid((int)x + 23 + shift, (int)y + 23)) {
                 x = x + shift;
-            } else if (!isCellSolid(x + 23 + shift, y + 26)) {
-                if (!isCellSolid(x, y + 23 + shift) && !isCellSolid(x + 23, y + 23 + shift))
+            } else if (!isCellSolid((int)x + 23 + shift, (int)y + 26)) {
+                if (!isCellSolid((int)x, (int)y + 23 + shift) && !isCellSolid((int)x + 23, (int)y + 23 + shift))
                     y = y + shift;
-            } else if (!isCellSolid(x + 23 + shift, y - 2)) {
-                if (!isCellSolid(x, y - shift) && !isCellSolid(x + 23, y - shift))
+            } else if (!isCellSolid((int)x + 23 + shift, (int)y - 2)) {
+                if (!isCellSolid((int)x, (int)y - shift) && !isCellSolid((int)x + 23, (int)y - shift))
                     y = y - shift;
             }
         }
-        return new Point(x, y);
+        return new Point((int)x, (int)y);
     }
 
     public String toJson() {

@@ -11,9 +11,8 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class GameSession {
     private static final Logger log = LogManager.getLogger(MatchMaker.class);
-    private static AtomicLong idGenerator = new AtomicLong();
 
-    public static final int PLAYERS_IN_GAME = 2;
+    public static final int PLAYERS_IN_GAME = 4;
 
     private final long gameId;
     private final String name;
@@ -22,6 +21,8 @@ public class GameSession {
         this.gameId = id;
         this.name = name;
     }
+
+
 
     public long getGameId() {
         return gameId;

@@ -9,6 +9,7 @@ import ru.atom.boot.mm.MatchMakerClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 
 
 public class MatchMaker implements Runnable {
@@ -20,37 +21,29 @@ public class MatchMaker implements Runnable {
         log.info("Started");
         boolean create = false;
         UserDao userDao = new UserDao();
-        List<GameSession> candidates = new ArrayList<>(GameSession.PLAYERS_IN_GAME);
+        List<GameSession> candidates = new ArrayList<>();
         MatchMakerMonitoring monitor = new MatchMakerMonitoring();
         JsonWork jsonWork = new JsonWork();
+        int playerInGame = GameSession.PLAYERS_IN_GAME;
         while (!Thread.currentThread().isInterrupted()) {
-            try {
-                candidates.add(
-                        ConnectionQueue.getInstance().poll(6000, TimeUnit.SECONDS)
-                );
-                monitor.incrementQueue(1);
-            } catch (InterruptedException e) {
-                log.warn("Timeout reached");
-                if (create) {
-                    try {
-                        MatchMakerClient.start(GameIdQueue.getInstance().poll().getGameId());
-                        create = false;
-                        monitor.decrimentQueue(1);
-                    } catch (Exception e2) {
-                        log.warn("Bad request to GameServer in start request");
-                    }
-                    log.info("Session created");
-                    candidates.clear();
-                }
+
+            while (!ConnectionQueue.getInstance().isEmpty())
+            {
+                LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(100));
             }
+
+
 
 
             //Создание сессии
 
             if (candidates.size() == 1) {
+                if(!PlayerAmountQueue.getInstance().isEmpty()){
+                    playerInGame = PlayerAmountQueue.getInstance().peek();
+                } else
+                    playerInGame = GameSession.PLAYERS_IN_GAME;
                 try {
-                    MatchMakerClient.create(GameSession.PLAYERS_IN_GAME);
-                    create = true;
+                    MatchMakerClient.create(playerInGame);
                 } catch (Exception e) {
                     log.warn("Bad request to GameServer in create request");
                 }
@@ -58,15 +51,14 @@ public class MatchMaker implements Runnable {
 
             //Старт сессии
 
-            if (candidates.size() == GameSession.PLAYERS_IN_GAME) {
+            if (candidates.size() == playerInGame) {
                 try {
                    Gamesession newUser = new Gamesession(GameIdQueue.getInstance().peek().getGameId(),
                             candidates.get(0).toString(), candidates.get(1).toString());
                     userDao.insert(newUser);
 
                     MatchMakerClient.start(GameIdQueue.getInstance().poll().getGameId());
-                    create = false;
-                    monitor.decrimentQueue(2);
+                    monitor.decrimentQueue(playerInGame);
                 } catch (Exception e) {
                     log.warn("Bad request to GameServer in start request");
                     GameIdQueue.getInstance().poll();

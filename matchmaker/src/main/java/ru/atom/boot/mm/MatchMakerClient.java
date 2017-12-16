@@ -38,13 +38,4 @@ public class MatchMakerClient {
         return client.newCall(request).execute();
     }
 
-    public static Response toFrontEnd(long gameId) throws IOException {
-        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-        Request request = new Request.Builder()
-                .post(RequestBody.create(mediaType, "gameId=" + gameId))
-                .url(PROTOCOL + HOST + PORTFE + "/")
-                .build();
-
-        return client.newCall(request).execute();
-    }
 }

@@ -8,10 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.atom.thread.mm.ConnectionQueue;
-import ru.atom.thread.mm.GameId;
-import ru.atom.thread.mm.GameIdQueue;
-import ru.atom.thread.mm.GameSession;
+import ru.atom.thread.mm.*;
 
 
 import java.util.concurrent.TimeUnit;
@@ -60,18 +57,21 @@ public class MatchMakerController {
     public void connect(@RequestParam("gameId") long id) {
 
         log.info("New gameId id=" + id);
-        GameIdQueue.getInstance().offer(new GameId(id));
-        try {
-            MatchMakerClient.toFrontEnd(id);
-            log.info("Good request to front-end");
-        }
-        catch (Exception e){
-            log.info("Bad request to front-end");
-        }
 
+        GameIdQueue.getInstance().offer(new GameId(id));
     }
 
 
+    @RequestMapping(
+            path = "gameId",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void playerInGame(@RequestParam("playerAmount") int amount) {
+        PlayerAmountQueue.getInstance().clear();
+        log.info("New player amount in game=" + amount);
+        PlayerAmountQueue.getInstance().offer(amount);
+    }
     @RequestMapping(
             path = "gameId",
             method = RequestMethod.GET,
