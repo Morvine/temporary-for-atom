@@ -4,7 +4,7 @@ ServerProxy = Class.extend({
     matchMakerUrl: "http://localhost:8080/matchmaker/join",
     gameId: "1",
 
-    socket: null,
+    socket: this,
 
     handler: {},
 
@@ -12,22 +12,7 @@ ServerProxy = Class.extend({
         this.handler['REPLICA'] = gMessages.handleReplica;
         this.handler['POSSESS'] = gMessages.handlePossess;
 
-        var self = this;
-        gInputEngine.subscribe('up', function () {
-            self.socket.send(gMessages.move('up'))
-        });
-        gInputEngine.subscribe('down', function () {
-            self.socket.send(gMessages.move('down'))
-        });
-        gInputEngine.subscribe('left', function () {
-            self.socket.send(gMessages.move('left'))
-        });
-        gInputEngine.subscribe('right', function () {
-            self.socket.send(gMessages.move('right'))
-        });
-        gInputEngine.subscribe('bomb', function () {
-            self.socket.send(gMessages.plantBomb())
-        });
+
     },
 
     getSessionIdFromMatchMaker: function () {
@@ -89,6 +74,22 @@ ServerProxy = Class.extend({
         this.socket.onerror = function (error) {
             console.log("Error " + error.message);
         };
+        var self = this;
+        gInputEngine.subscribe('up', function () {
+            self.socket.send(gMessages.move('up'))
+        });
+        gInputEngine.subscribe('down', function () {
+            self.socket.send(gMessages.move('down'))
+        });
+        gInputEngine.subscribe('left', function () {
+            self.socket.send(gMessages.move('left'))
+        });
+        gInputEngine.subscribe('right', function () {
+            self.socket.send(gMessages.move('right'))
+        });
+        gInputEngine.subscribe('bomb', function () {
+            self.socket.send(gMessages.plantBomb())
+        });
     }
 
 });

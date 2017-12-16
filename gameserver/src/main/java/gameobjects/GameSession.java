@@ -24,14 +24,17 @@ public class GameSession implements Tickable {
     private ConcurrentHashMap<Integer, Bomb> inGameBombs = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Ground> inGameGround = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Explosion> inGameExplosions = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, Bonus> inGameBonus = new ConcurrentHashMap<>();
 
     private List<GameObject> gameObjects = new ArrayList<>();
     private Cell[][] gameArea = new Cell[17][13];
     private long id;
+    private int bonusChance;
 
     public GameSession(long id, Ticker ticker) {
         this.id = id;
         this.ticker = ticker;
+        this.bonusChance = 6;
     }
 
     public List<GameObject> getGameObjects() {
@@ -47,6 +50,10 @@ public class GameSession implements Tickable {
         }
         if (gameObject.getClass().getSimpleName().equals("Box")) {
             inGameBoxes.put(gameObject.getId(),(Box) gameObject);
+            ticker.registerTickable((Tickable)gameObject);
+        }
+        if (gameObject.getClass().getSimpleName().equals("Bonus")) {
+            inGameBonus.put(gameObject.getId(),(Bonus) gameObject);
             ticker.registerTickable((Tickable)gameObject);
         }
         if (gameObject.getClass().getSimpleName().equals("BomberGirl")) {
@@ -73,6 +80,9 @@ public class GameSession implements Tickable {
         }
         if (gameObject.getClass().getSimpleName().equals("Box")) {
             inGameBoxes.remove(gameObject.getId());
+        }
+        if (gameObject.getClass().getSimpleName().equals("Bonus")) {
+            inGameBonus.remove(gameObject.getId());
         }
         if (gameObject.getClass().getSimpleName().equals("BomberGirl")) {
             inGameBomberGirls.remove(gameObject.getId());
@@ -128,19 +138,88 @@ public class GameSession implements Tickable {
                     if ((y > 2) && (y < 10)) {
                         addGameObject(new Box(x * 32, y * 32, this));
                         gameArea[x][y].addState(State.BOX);
+                        if ((bonusChance >(int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)){
+                            addGameObject(new Bonus(x * 32, y *32, this, 1));
+                            gameArea[x][y].addState(State.BONUSSPEED);
+                            gameArea[x][y].addState(State.BONUS);
+                        }
+                        if ((bonusChance < (int) (Math.random() * 100)) && ((bonusChance * 2) >(int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)){
+                            addGameObject(new Bonus(x * 32, y *32, this, 1));
+                            gameArea[x][y].addState(State.BONUSFIRE);
+                            gameArea[x][y].addState(State.BONUS);
+                        }
+                        if (((bonusChance * 2) < (int) (Math.random() * 100)) && ((bonusChance * 3) >(int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)){
+                            addGameObject(new Bonus(x * 32, y *32, this, 1));
+                            gameArea[x][y].addState(State.BONUSBOMB);
+                            gameArea[x][y].addState(State.BONUS);
+                        }
+
                     }
                 } else if ((x == 2) || (x == 14)) {
                     if ((y % 2 != 0) && (y != 1) && (y != 11)) {
                         addGameObject(new Box(x * 32, y * 32, this));
                         gameArea[x][y].addState(State.BOX);
+
+                        if ((bonusChance >(int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)){
+                            addGameObject(new Bonus(x * 32, y *32, this, 1));
+                            gameArea[x][y].addState(State.BONUSSPEED);
+                            gameArea[x][y].addState(State.BONUS);
+                        }
+                        if ((bonusChance < (int) (Math.random() * 100)) && ((bonusChance * 2) >(int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)){
+                            addGameObject(new Bonus(x * 32, y *32, this, 1));
+                            gameArea[x][y].addState(State.BONUSFIRE);
+                            gameArea[x][y].addState(State.BONUS);
+                        }
+                        if (((bonusChance * 2) < (int) (Math.random() * 100)) && ((bonusChance  * 3) >(int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)){
+                            addGameObject(new Bonus(x * 32, y *32, this, 1));
+                            gameArea[x][y].addState(State.BONUSBOMB);
+                            gameArea[x][y].addState(State.BONUS);
+                        }
+
                     }
                 } else {
                     if (y % 2 != 0) {
                         addGameObject(new Box(x * 32, y * 32, this));
                         gameArea[x][y].addState(State.BOX);
+
+                        if ((bonusChance >(int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)){
+                            addGameObject(new Bonus(x * 32, y *32, this, 1));
+                            gameArea[x][y].addState(State.BONUSSPEED);
+                            gameArea[x][y].addState(State.BONUS);
+                        }
+                        if ((bonusChance < (int) (Math.random() * 100)) && ((bonusChance * 2) >(int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)){
+                            addGameObject(new Bonus(x * 32, y *32, this, 1));
+                            gameArea[x][y].addState(State.BONUSFIRE);
+                            gameArea[x][y].addState(State.BONUS);
+                        }
+                        if (((bonusChance * 2) <(int) (Math.random() * 100)) && ((bonusChance * 3) >(int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)){
+                            addGameObject(new Bonus(x * 32, y *32, this, 1));
+                            gameArea[x][y].addState(State.BONUSBOMB);
+                            gameArea[x][y].addState(State.BONUS);
+                        }
+
+
                     } else if (x % 2 != 0) {
                         addGameObject(new Box(x * 32, y * 32, this));
                         gameArea[x][y].addState(State.BOX);
+
+                        if ((bonusChance >(int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)){
+                            addGameObject(new Bonus(x * 32, y *32, this, 1));
+                            gameArea[x][y].addState(State.BONUSSPEED);
+                            gameArea[x][y].addState(State.BONUS);
+                        }
+                        if ((bonusChance  < (int) (Math.random() * 100)) && ((bonusChance * 2) >(int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)){
+                            addGameObject(new Bonus(x * 32, y *32, this, 1));
+                            gameArea[x][y].addState(State.BONUSFIRE);
+                            gameArea[x][y].addState(State.BONUS);
+                        }
+                        if (((bonusChance * 2) < (int) (Math.random() * 100)) &&((bonusChance * 3) >(int) (Math.random() * 100)) && !gameArea[x][y].getState().contains(State.BONUS)){
+                            addGameObject(new Bonus(x * 32, y *32, this, 1));
+                            gameArea[x][y].addState(State.BONUSBOMB);
+                            gameArea[x][y].addState(State.BONUS);
+                        }
+
+
                     }
                 }
             }
@@ -161,15 +240,15 @@ public class GameSession implements Tickable {
     }
 
     public Cell getCellFromGameArea(int x, int y) {
-        return gameArea[x][y];
+        return gameArea[x/32][y/32];
     }
 
     public void addStateToCell(int x, int y, State state) {
-        gameArea[x][y].addState(state);
+        gameArea[x/32][y/32].addState(state);
     }
 
     public boolean removeStateFromCell(int x, int y, State state) {
-        return (gameArea[x][y].getState().remove(state));
+        return (gameArea[x/32][y/32].getState().remove(state));
     }
 
     public int getId() {
@@ -185,6 +264,21 @@ public class GameSession implements Tickable {
         String result = objjson.substring(0, (objjson.length() - 1));
         return result;
     }
+
+    public String jsonStringBonus() {
+        if (inGameBonus.size() == 0) {
+            return null;
+        } else {
+            String objjson = "";
+            for (Integer i : inGameBonus.keySet()) {
+                Bonus obj = inGameBonus.get(i);
+                objjson = objjson + obj.toJson() + ",";
+            }
+            String result = objjson.substring(0, (objjson.length() - 1));
+            return result;
+        }
+    }
+
 
     public String jsonStringExplosions() {
         if (inGameExplosions.size() == 0) {
