@@ -99,7 +99,7 @@ Player = Entity.extend({
         this.fade();
     },
 
-    fade: function() {
+    remove: function() {
         var timer = 0;
         var bmp = this.bmp;
         var fade = setInterval(function() {

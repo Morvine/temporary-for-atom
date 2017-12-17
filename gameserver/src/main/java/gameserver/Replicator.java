@@ -25,11 +25,18 @@ public class Replicator {
 
             WebSocketSession session = ConnectionPool.getInstance().getSession(connectionPool.poll());
 
-            Broker.getInstance().send(ConnectionPool.getInstance().getPlayer(session), Topic.REPLICA,
-                    "[" + gameSession.jsonStringWalls() + gameSession.jsonStringBonus() +
-                    gameSession.jsonStringBoxes() + gameSession.jsonStringBombs() +
-                            gameSession.jsonStringExplosions() + gameSession.jsonBomberGirl()
-                            + "], \"gameOver\":" + gameSession.getGameOver());
+            if (gameSession.getGameOver() == null) {
+                Broker.getInstance().send(ConnectionPool.getInstance().getPlayer(session), Topic.REPLICA,
+                        "[" + gameSession.jsonStringWalls() + gameSession.jsonStringBonus() +
+                                gameSession.jsonStringBoxes() + gameSession.jsonStringBombs() +
+                                gameSession.jsonStringExplosions() + gameSession.jsonBomberGirl() + "]");
+            } else {
+                Broker.getInstance().send(ConnectionPool.getInstance().getPlayer(session), Topic.REPLICA,
+                        "[" + gameSession.jsonStringWalls() + gameSession.jsonStringBonus() +
+                                gameSession.jsonStringBoxes() + gameSession.jsonStringBombs() +
+                                gameSession.jsonStringExplosions() + gameSession.jsonBomberGirl()
+                                + gameSession.getGameOver() + "]");
+            }
         }
 
     }

@@ -356,17 +356,18 @@ public class GameSession implements Tickable {
         return result;
     }
 
-    public boolean getGameOver() {
-        if (inGameBomberGirls.size() <= 1)
-            return true;
-        else
-            return false;
+    public String getGameOver() {
+        if (inGameBomberGirls.size() <= 1) {
+            String json = ",{\"type\":\"over\",\"id\":10000,\"position\":{\"x\":32,\"y\":32}}";
+            return json;
+        }
+        return null;
     }
 
 
-    @Override
-    public void tick(long elapsed) {
-        log.info("tick");
+        @Override
+        public void tick ( long elapsed){
+            log.info("tick");
 
+        }
     }
-}
