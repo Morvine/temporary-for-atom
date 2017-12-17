@@ -80,12 +80,14 @@ public class BomberGirl extends Field implements Tickable, Movable, Comparable {
             if (Input.hasBombInputForPlayer(session)) {
                 input = Input.getInputForPlayer(session);
                 if (maxBombs > bombPlantedCount()) {
-                    gameSession.addGameObject(new Bomb(this.x + 12, this.y + 12, gameSession, bombPower,
-                            this, bombType));
-                    gameSession.getCellFromGameArea(this.x, this.y)
-                            .addState(bombType);
-                    bombStatus.offer(true);
-                    InputQueue.getInstance().remove(input);
+                    if (!gameSession.getCellFromGameArea(x, y).getState().contains(bombType)) {
+                        gameSession.addGameObject(new Bomb(this.x + 12, this.y + 12, gameSession, bombPower,
+                                this, bombType));
+                        gameSession.getCellFromGameArea(this.x, this.y)
+                                .addState(bombType);
+                        bombStatus.offer(true);
+                        InputQueue.getInstance().remove(input);
+                    }
                 }
             }
         } else gameSession.removeGameObject(this);
