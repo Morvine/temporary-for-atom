@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 public class Box extends Field implements Positionable, Tickable, Comparable {
-    private final static Logger log = LogManager.getLogger(Box.class);
+    private final Logger log = LogManager.getLogger(Box.class);
     private int x;
     private int y;
     private int id;
@@ -30,7 +30,7 @@ public class Box extends Field implements Positionable, Tickable, Comparable {
 
 
     public Bar getBar() {
-        return new Bar(x,y,x+28,y+28);
+        return new Bar(x, y, x + 28, y + 28);
     }
 
     public void tick(long elapsed) {

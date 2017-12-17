@@ -2,10 +2,11 @@ package boxes;
 
 import message.Input;
 import org.springframework.web.socket.WebSocketSession;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class InputQueue
-{private static ConcurrentLinkedQueue<Input> instance = new ConcurrentLinkedQueue<>();
+public class InputQueue {
+    private static ConcurrentLinkedQueue<Input> instance = new ConcurrentLinkedQueue<>();
 
     public static ConcurrentLinkedQueue<Input> getInstance() {
         return instance;

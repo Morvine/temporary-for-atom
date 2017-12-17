@@ -15,7 +15,7 @@ public class Wall extends Field implements Positionable {
         log.info("New wall with id {}", id);
     }
 
-    private final static Logger log = LogManager.getLogger(Wall.class);
+    private final Logger log = LogManager.getLogger(Wall.class);
 
     public String toJson() {
         Point pos = getPosition();

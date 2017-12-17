@@ -10,6 +10,8 @@ import org.apache.logging.log4j.Logger;
 import boxes.GameCreatorQueue;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 
 
 public class GameServer implements Runnable {
@@ -26,14 +28,14 @@ public class GameServer implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 while (GameCreatorQueue.getInstance().isEmpty()) {
-                    //Thread.sleep(100);
+                    LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(100));
                 }
                 playerCount = GameCreatorQueue.getInstance().poll();
-                GameMechanics GameMechanics = new GameMechanics(playerCount);
-                Thread game = new Thread(GameMechanics);
+                GameMechanics gameMechanics = new GameMechanics(playerCount);
+                Thread game = new Thread(gameMechanics);
                 game.start();
-                log.info("GameMechanics with id: " + GameMechanics.getId() + " was created");
-                sendGameId(GameMechanics.getId());
+                log.info("GameMechanics with id: " + gameMechanics.getId() + " was created");
+                sendGameId(gameMechanics.getId());
             } catch (Exception e) {
                 log.info("No response");
             }

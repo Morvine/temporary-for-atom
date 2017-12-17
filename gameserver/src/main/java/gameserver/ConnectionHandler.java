@@ -1,19 +1,23 @@
 package gameserver;
 
-//import com.sun.corba.se.pept.transport.ConnectionCache;
 
 import boxes.ConnectionPool;
 import boxes.InputQueue;
-import util.JsonHelper;
+
 
 import message.Input;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.*;
+import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
+
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.*;
+
 
 @Component
 public class ConnectionHandler extends TextWebSocketHandler implements WebSocketHandler {
@@ -26,6 +30,7 @@ public class ConnectionHandler extends TextWebSocketHandler implements WebSocket
         try {
             super.afterConnectionEstablished(session);
         } catch (Exception e) {
+            log.info("smth");
 
         }
         log.info("Hello!");
@@ -45,12 +50,12 @@ public class ConnectionHandler extends TextWebSocketHandler implements WebSocket
             log.info("Player with name: " + ConnectionPool.getInstance().getPlayer(session)
                     + " is trying to connect to game with id: " + ConnectionPool.getInstance().getGameId(name));
         } catch (NullPointerException e) {
+            log.info("smth");
         }
     }
 
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        //log.info(Broker.getInstance().receive(session,message.getPayload()).getTopic());
-        //log.info(Broker.getInstance().receiveDirection(session, Broker.getInstance().receive(session, message.getPayload()).getData()).getDirection());
+
         InputQueue.getInstance().add(new Input(session, Broker.getInstance().receive(session, message.getPayload())));
         log.info("smth received");
     }

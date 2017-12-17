@@ -12,6 +12,7 @@ import ru.atom.thread.mm.*;
 
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,10 @@ public class MatchMakerController {
     public ResponseEntity<String> join(@RequestParam("name") String name) {
         log.info("New connection  name=" + name);
         ConnectionQueue.getInstance().offer(new GameSession(0, name));
+
         while (GameIdQueue.getInstance().isEmpty()) {
+            LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(100));
+
         }
         try {
             return new ResponseEntity<>(
@@ -54,16 +58,16 @@ public class MatchMakerController {
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void connect(@RequestParam("gameId") long id) {
+    public void connect(@RequestParam("gameId") int id) {
 
         log.info("New gameId id=" + id);
 
-        GameIdQueue.getInstance().offer(new GameId(id));
+        GameIdQueue.getInstance().offer(id);
     }
 
 
     @RequestMapping(
-            path = "gameId",
+            path = "playerAmount",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -71,22 +75,6 @@ public class MatchMakerController {
         PlayerAmountQueue.getInstance().clear();
         log.info("New player amount in game=" + amount);
         PlayerAmountQueue.getInstance().offer(amount);
-    }
-    @RequestMapping(
-            path = "gameId",
-            method = RequestMethod.GET,
-            produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> gameId() {
-        try {
-            return new ResponseEntity<>(
-                    GameIdQueue.getInstance().peek().toString(),
-                    HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(
-                    "-1",
-                    HttpStatus.OK);
-
-        }
     }
 
 

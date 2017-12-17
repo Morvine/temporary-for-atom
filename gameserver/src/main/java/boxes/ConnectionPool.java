@@ -72,7 +72,9 @@ public class ConnectionPool {
                     result.offer(getSession(player));
                 }
             }
-        } catch (NullPointerException e) {log.warn("Mistake :(");}
+        } catch (NullPointerException e) {
+            log.warn("Mistake :(");
+        }
         return result;
     }
 
@@ -84,7 +86,9 @@ public class ConnectionPool {
                     result.offer(player);
                 }
             }
-        } catch (NullPointerException e) {log.warn("Mistake :(");}
+        } catch (NullPointerException e) {
+            log.warn("Mistake :(");
+        }
         return result;
     }
 

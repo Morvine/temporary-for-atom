@@ -4,9 +4,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class GameIdQueue {
-    private static BlockingQueue<GameId> instance = new LinkedBlockingQueue<>();
+    private static BlockingQueue<Integer> instance = new LinkedBlockingQueue<>();
 
-    public static BlockingQueue<GameId> getInstance() {
+    public static BlockingQueue<Integer> getInstance() {
         return instance;
     }
 }

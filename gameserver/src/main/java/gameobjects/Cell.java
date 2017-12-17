@@ -1,6 +1,7 @@
 package gameobjects;
 
 import geometry.Bar;
+
 import java.util.ArrayList;
 
 public class Cell extends Bar {
@@ -15,13 +16,16 @@ public class Cell extends Bar {
 
     public void addState(State state) {
         this.states.add(state);
-    };
+    }
+
+    ;
 
     public int getX() {
-        return this.x*32;
+        return this.x * 32;
     }
+
     public int getY() {
-        return this.y*32;
+        return this.y * 32;
     }
 
     public boolean equals(Object o) {

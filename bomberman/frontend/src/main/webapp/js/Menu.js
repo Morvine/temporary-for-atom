@@ -74,7 +74,7 @@ Menu = Class.extend({
             that.start();
         });
 
-        var playButton = new createjs.Text("Play", "32px Helvetica", "#ff4444");
+        var playButton = new createjs.Text("Play", "32px fantasy", "#00aa00");
         var singleTitleWidth = playButton.getMeasuredWidth();
         var modeTitlesY = startButtonY + startButtonSize - playButton.getMeasuredHeight() - 20;
 
@@ -93,11 +93,11 @@ Menu = Class.extend({
     },
 
     showLoader: function () {
-        var bgGraphics = new createjs.Graphics().beginFill("#000000").drawRect(0, 0, gGameEngine.size.w, gGameEngine.size.h);
+        var bgGraphics = new createjs.Graphics().beginFill("#000500").drawRect(0, 0, gGameEngine.size.w, gGameEngine.size.h);
         var bg = new createjs.Shape(bgGraphics);
         gGameEngine.stage.addChild(bg);
 
-        var loadingText = new createjs.Text("Loading...", "20px Helvetica", "#FFFFFF");
+        var loadingText = new createjs.Text("Prepare for game!", "20px fantasy", "#32ff33");
         loadingText.x = gGameEngine.size.w / 2 - loadingText.getMeasuredWidth() / 2;
         loadingText.y = gGameEngine.size.h / 2 - loadingText.getMeasuredHeight() / 2 - 150;
         gGameEngine.stage.addChild(loadingText);

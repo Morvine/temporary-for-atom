@@ -12,8 +12,8 @@ import java.util.concurrent.locks.LockSupport;
 
 import boxes.GameStarterQueue;
 
-import gameobjects.*;
-import org.springframework.web.socket.WebSocketSession;
+import gameobjects.GameSession;
+
 
 
 public class GameMechanics implements Runnable {
@@ -32,6 +32,9 @@ public class GameMechanics implements Runnable {
         while (!GameStarterQueue.getInstance().contains((int) id)) {
             LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(100));
         }
+        while (ConnectionPool.getInstance().getPlayersWithGameId((int) id).size() < playerCount) {
+            LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(100));
+        }
         GameStarterQueue.getInstance().poll();
         log.info("Game {} started", id);
         log.info("Players in this session:");
@@ -40,7 +43,7 @@ public class GameMechanics implements Runnable {
             log.info(playerQueue.poll());
         }
         Ticker ticker = new Ticker();
-        GameSession gameSession = new GameSession((int) id, ticker);
+        GameSession gameSession = new GameSession((int) id, ticker, playerCount);
         gameSession.initGameArea();
         /*for (int y = 0; y < 13; y++) {
             for (int x = 0; x < 17; x++)
