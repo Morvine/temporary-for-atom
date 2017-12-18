@@ -37,6 +37,8 @@ public class Ticker {
             replicator.writeReplica(gameSession);
             log.info("{}: tick ", tickNumber);
             tickNumber++;
+            if (gameSession.getGameOver()!=null)
+                break;
         }
     }
 

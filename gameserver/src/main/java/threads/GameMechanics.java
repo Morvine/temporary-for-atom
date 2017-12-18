@@ -51,6 +51,7 @@ public class GameMechanics implements Runnable {
             System.out.print("\n");}*/  //Proverka zapolnenia pol`a
         ticker.gameLoop(gameSession);
         log.info("Game #{} over", id);
+        Thread.currentThread().interrupt();
     }
 
     public long getId() {

@@ -1,11 +1,11 @@
 Menu = Class.extend({
-    visible: true,
+    visible: null,
 
     views: [],
 
     init: function () {
         gGameEngine.playersCount = 0;
-
+        this.visible=true;
         this.showLoader();
     },
 
