@@ -37,10 +37,24 @@ public class Ticker {
             replicator.writeReplica(gameSession);
             log.info("{}: tick ", tickNumber);
             tickNumber++;
-            if (gameSession.getGameOver()!=null)
+            if (gameSession.getGameOver() != null) {
+                int counter = 0;
+                while (counter < 50) {
+                    gameSession.explosionsFirst();
+                    LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(300));
+                    replicator.writeReplica(gameSession);
+                    gameSession.explosionsSecond();
+                    LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(300));
+                    replicator.writeReplica(gameSession);
+                    gameSession.removeExp();
+                    counter++;
+                }
                 break;
+            }
         }
     }
+
+
 
     public void registerTickable(Tickable tickable) {
         tickables.add(tickable);

@@ -364,10 +364,31 @@ public class GameSession implements Tickable {
         return null;
     }
 
-
-        @Override
-        public void tick ( long elapsed){
-            log.info("tick");
-
+    public void explosionsFirst() {
+        for (int x = 0; x < 18; x+=2) {
+            for (int y = 0; y < 13; y+=2) {
+                Explosion exp = new Explosion(x * 32, y * 32, this);
+                inGameExplosions.put(exp.getId(), exp);
+            }
         }
     }
+
+    public void explosionsSecond() {
+        for (int x = 1; x < 18; x+=2) {
+            for (int y = 1; y < 13; y+=2) {
+                Explosion exp = new Explosion(x * 32, y * 32, this);
+                inGameExplosions.put(exp.getId(), exp);
+            }
+        }
+    }
+
+    public void removeExp() {
+        inGameExplosions.clear();
+    }
+
+    @Override
+    public void tick(long elapsed) {
+        log.info("tick");
+
+    }
+}
